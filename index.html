@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InternUG — Uganda Internship Placement Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:#1a3d2b; --green:#2d6a4f; --mint:#52b788;
+  --cream:#faf7f2; --paper:#ffffff; --sand:#f0ebe0;
+  --border:#e0d9cc; --text:#1a1a1a; --text2:#4a4a4a; --text3:#8a8a8a;
+  --amber:#e07a5f; --amber-lt:#fdebd7; --sky:#3a7fbd; --sky-lt:#dbeafe;
+  --mint-lt:#d8f3dc; --r:16px; --r-lg:24px;
+  --shadow:0 2px 16px rgba(26,61,43,.07);
+  --shadow-lg:0 8px 40px rgba(26,61,43,.13);
+  --sidebar:280px; --font:'Sora',sans-serif; --display:'Fraunces',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;}
+body{font-family:var(--font);background:var(--cream);color:var(--text);display:flex;min-height:100vh;line-height:1.65;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--forest);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;}
+.sidebar-top{padding:2rem 1.5rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.08);}
+.brand{display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;}
+.brand-icon{width:48px;height:48px;background:var(--mint);border-radius:14px;display:grid;place-items:center;font-size:1.4rem;flex-shrink:0;box-shadow:0 4px 12px rgba(82,183,136,.4);}
+.brand-name{font-family:var(--display);font-size:1.45rem;color:#fff;line-height:1.1;}
+.brand-sub{font-size:.68rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+.user-pill{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:1rem 1.1rem;display:none;align-items:center;gap:.85rem;}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:var(--mint);color:var(--forest);display:grid;place-items:center;font-weight:800;font-size:.95rem;flex-shrink:0;}
+.pill-name{font-size:.88rem;font-weight:600;color:#fff;}
+.pill-role{font-size:.65rem;color:var(--mint);text-transform:uppercase;letter-spacing:.07em;font-weight:700;}
+.nav-section{padding:1.25rem 1rem;flex:1;}
+.nav-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);font-weight:700;padding:0 .5rem;margin-bottom:.6rem;}
+.nav-link{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;border-radius:12px;cursor:pointer;font-size:.9rem;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;transition:all .18s;margin-bottom:.2rem;user-select:none;border:none;background:none;width:100%;text-align:left;font-family:var(--font);}
+.nav-link:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-link.active{background:var(--mint);color:var(--forest);font-weight:700;box-shadow:0 4px 12px rgba(82,183,136,.3);}
+.nav-link .icon{font-size:1.1rem;flex-shrink:0;}
+.sidebar-footer{padding:1.25rem 1rem 1.5rem;border-top:1px solid rgba(255,255,255,.07);}
+.logout-btn{display:none;align-items:center;gap:.6rem;width:100%;background:rgba(224,122,95,.15);border:1px solid rgba(224,122,95,.25);color:#fca090;padding:.8rem 1rem;border-radius:12px;cursor:pointer;font-family:var(--font);font-size:.88rem;font-weight:600;transition:all .18s;}
+.logout-btn:hover{background:rgba(224,122,95,.3);color:#fff;}
+
+/* MAIN */
+.main-wrap{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:var(--paper);border-bottom:1px solid var(--border);padding:1.1rem 2.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;}
+.hamburger{display:none;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text);padding:.2rem;line-height:1;}
+.topbar-title{font-family:var(--display);font-size:1.4rem;color:var(--text);flex:1;font-style:italic;}
+.topbar-chip{background:var(--mint-lt);color:var(--green);font-size:.72rem;font-weight:700;padding:.3rem .9rem;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;display:none;}
+.content{padding:2.5rem 3rem;flex:1;max-width:1200px;width:100%;}
+
+/* SECTIONS */
+.section{display:none;}
+.section.active{display:block;animation:slideUp .28s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* AUTH */
+.auth-wrap{min-height:calc(100vh - 80px);display:flex;align-items:center;justify-content:center;padding:2rem 0;}
+.auth-card{background:var(--paper);border-radius:var(--r-lg);padding:3rem;width:100%;max-width:480px;box-shadow:var(--shadow-lg);border:1px solid var(--border);}
+.auth-eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--mint);font-weight:700;margin-bottom:.5rem;}
+.auth-title{font-family:var(--display);font-size:2.2rem;line-height:1.15;color:var(--text);margin-bottom:.4rem;}
+.auth-sub{color:var(--text3);font-size:.9rem;margin-bottom:2rem;}
+.demo-box{margin-top:1.5rem;background:var(--sand);border-radius:10px;padding:1rem 1.1rem;font-size:.78rem;color:var(--text2);line-height:1.8;border:1px solid var(--border);}
+
+/* FORMS */
+.field{margin-bottom:1.3rem;}
+.field label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin-bottom:.45rem;}
+.field input,.field select,.field textarea{width:100%;font-family:var(--font);font-size:.95rem;padding:.9rem 1.1rem;border:1.5px solid var(--border);border-radius:10px;background:var(--cream);color:var(--text);transition:border-color .15s,box-shadow .15s,background .15s;line-height:1.5;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--mint);background:var(--paper);box-shadow:0 0 0 4px rgba(82,183,136,.14);}
+.field textarea{resize:vertical;min-height:90px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-footer{text-align:center;margin-top:1.5rem;font-size:.88rem;color:var(--text3);}
+.link{color:var(--green);cursor:pointer;font-weight:700;text-decoration:underline;text-underline-offset:3px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;border-radius:10px;font-family:var(--font);font-size:.92rem;font-weight:700;cursor:pointer;border:none;transition:all .18s;text-decoration:none;letter-spacing:.01em;line-height:1;}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 3px 12px rgba(45,106,79,.3);}
+.btn-primary:hover{background:var(--forest);transform:translateY(-1px);box-shadow:0 5px 18px rgba(45,106,79,.4);}
+.btn-primary:active{transform:translateY(0);}
+.btn-outline{background:transparent;color:var(--green);border:1.5px solid var(--green);}
+.btn-outline:hover{background:var(--mint-lt);}
+.btn-ghost{background:var(--sand);color:var(--text2);border:1.5px solid var(--border);}
+.btn-ghost:hover{background:var(--border);color:var(--text);}
+.btn-danger{background:var(--amber-lt);color:var(--amber);border:1.5px solid rgba(224,122,95,.25);}
+.btn-danger:hover{background:var(--amber);color:#fff;}
+.btn-sm{padding:.55rem 1rem;font-size:.8rem;border-radius:8px;}
+.btn-full{width:100%;justify-content:center;}
+
+/* PAGE HEADER */
+.page-header{margin-bottom:2.5rem;}
+.page-eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mint);font-weight:700;margin-bottom:.4rem;}
+.page-title{font-family:var(--display);font-size:2.1rem;color:var(--text);line-height:1.2;font-style:italic;}
+.page-sub{color:var(--text3);font-size:.95rem;margin-top:.4rem;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2.5rem;}
+.stat-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.6rem 1.5rem;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--mint),var(--green));}
+.stat-val{font-family:var(--display);font-size:2.6rem;line-height:1;color:var(--forest);font-weight:700;margin-bottom:.35rem;}
+.stat-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:700;}
+
+/* TABS */
+.tab-bar{display:flex;gap:.4rem;border-bottom:2px solid var(--border);margin-bottom:2rem;}
+.tab{background:none;border:none;padding:.8rem 1.4rem;font-family:var(--font);font-size:.88rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;border-radius:8px 8px 0 0;white-space:nowrap;}
+.tab:hover{color:var(--text);background:var(--sand);}
+.tab.active{color:var(--green);border-bottom-color:var(--green);font-weight:700;}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:slideUp .22s ease;}
+
+/* SEARCH */
+.search-wrap{position:relative;max-width:400px;margin-bottom:1.75rem;}
+.search-wrap input{width:100%;font-family:var(--font);font-size:.92rem;padding:.8rem 1rem .8rem 2.75rem;border:1.5px solid var(--border);border-radius:10px;background:var(--paper);color:var(--text);transition:border-color .15s,box-shadow .15s;}
+.search-wrap input:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 4px rgba(82,183,136,.12);}
+.search-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;pointer-events:none;font-family:var(--font);}
+.search-wrap input{padding-left:4.5rem;}
+
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;}
+.card{background:var(--paper);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.75rem;display:flex;flex-direction:column;gap:.7rem;transition:box-shadow .2s,transform .2s,border-color .2s;}
+.card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--mint);}
+.card-company{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mint);font-weight:700;}
+.card-title{font-size:1.05rem;font-weight:700;color:var(--text);line-height:1.35;}
+.card-desc{font-size:.88rem;color:var(--text2);line-height:1.6;flex:1;}
+.card-meta{font-size:.8rem;color:var(--text3);display:flex;align-items:center;gap:.35rem;}
+.card-tags{display:flex;flex-wrap:wrap;gap:.4rem;}
+.tag{font-size:.7rem;font-weight:700;padding:.3rem .75rem;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;}
+.tag-green{background:var(--mint-lt);color:var(--green);}
+.tag-blue{background:var(--sky-lt);color:var(--sky);}
+.tag-amber{background:var(--amber-lt);color:var(--amber);}
+.tag-gray{background:var(--sand);color:var(--text2);}
+.divider{border:none;border-top:1px solid var(--border);margin:.75rem 0;}
+.card-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.5rem;align-items:center;}
+.badge{display:inline-block;font-size:.68rem;font-weight:800;padding:.3rem .8rem;border-radius:999px;text-transform:uppercase;letter-spacing:.07em;}
+.badge-pending{background:var(--amber-lt);color:var(--amber);}
+.badge-approved{background:var(--mint-lt);color:var(--green);}
+.badge-rejected{background:#fde8e8;color:#c0392b;}
+.badge-active{background:var(--sky-lt);color:var(--sky);}
+.badge-open{background:var(--mint-lt);color:var(--green);}
+.badge-closed{background:var(--sand);color:var(--text3);}
+
+/* PANEL */
+.panel{background:var(--paper);border:1px solid var(--border);border-radius:var(--r-lg);padding:2.25rem 2.5rem;max-width:700px;}
+.panel-title{font-family:var(--display);font-size:1.35rem;color:var(--text);margin-bottom:1.5rem;font-style:italic;}
+
+/* EMPTY */
+.empty{text-align:center;padding:4rem 2rem;color:var(--text3);}
+.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:.5;}
+.empty-msg{font-size:.95rem;}
+
+/* TOAST */
+#toast{position:fixed;bottom:2.5rem;right:2.5rem;padding:1rem 1.5rem;border-radius:14px;font-size:.9rem;font-weight:600;box-shadow:0 10px 32px rgba(0,0,0,.18);transform:translateY(120%) scale(.92);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);z-index:9999;max-width:340px;line-height:1.4;}
+#toast.show{transform:translateY(0) scale(1);opacity:1;}
+#toast.success{background:var(--green);color:#fff;}
+#toast.error{background:var(--amber);color:#fff;}
+#toast.info{background:var(--sky);color:#fff;}
+
+/* MOBILE */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 0 100vw rgba(0,0,0,.4);}
+  .main-wrap{margin-left:0;}
+  .hamburger{display:block;}
+  .content{padding:1.5rem 1.25rem;}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .grid{grid-template-columns:1fr;}
+  .field-row{grid-template-columns:1fr;}
+  .auth-card{padding:2rem 1.5rem;}
+  .panel{padding:1.5rem 1.25rem;}
+}
+@media(max-width:500px){
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:.75rem;}
+  .tab{padding:.65rem .9rem;font-size:.8rem;}
+  .content{padding:1.25rem 1rem;}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <div class="brand">
+      <div class="brand-icon">🎓</div>
+      <div>
+        <div class="brand-name">InternUG</div>
+        <div class="brand-sub">Uganda Placement Portal</div>
+      </div>
+    </div>
+    <div class="user-pill" id="userPill">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <div>
+        <div class="pill-name" id="pillName">—</div>
+        <div class="pill-role" id="pillRole">—</div>
+      </div>
+    </div>
+  </div>
+  <nav class="nav-section" id="navLinks">
+    <div class="nav-label">Navigation</div>
+    <button class="nav-link active" data-section="login" onclick="go('login')"> Sign In</button>
+    <button class="nav-link" data-section="register" onclick="go('register')"> Register</button>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="logout-btn" id="logoutBtn" onclick="logout()">Sign Out</button>
+  </div>
+</aside>
+
+<div class="main-wrap">
+  <header class="topbar">
+    <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <h1 class="topbar-title" id="topbarTitle">Welcome to InternUG</h1>
+    <div class="topbar-chip" id="topbarChip"></div>
+  </header>
+
+  <main class="content">
+
+    <!-- LOGIN -->
+    <section id="login" class="section active">
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-eyebrow">InternUG Portal</div>
+          <h2 class="auth-title">Welcome back</h2>
+          <p class="auth-sub">Sign in to your internship account</p>
+          <form onsubmit="login(event)">
+            <div class="field"><label>Email Address</label><input type="email" id="loginEmail" placeholder="you@example.com" required></div>
+            <div class="field"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" required></div>
+            <div class="field"><label>I am a…</label>
+              <select id="loginRole">
+                <option value="student">Student</option>
+                <option value="company">Company / Employer</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top:.5rem">Sign In</button>
+          </form>
+          <div class="form-footer">No account? <span class="link" onclick="go('register')">Create one here</span></div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- REGISTER -->
+    <section id="register" class="section">
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-eyebrow">Get Started</div>
+          <h2 class="auth-title">Create your account</h2>
+          <p class="auth-sub">Join Uganda's internship placement network</p>
+          <form onsubmit="register(event)">
+            <div class="field"><label>Full Name</label><input type="text" id="regName" placeholder="Your full name" required></div>
+            <div class="field"><label>Email Address</label><input type="email" id="regEmail" placeholder="you@example.com" required></div>
+            <div class="field"><label>Password</label><input type="password" id="regPassword" placeholder="Minimum 6 characters" required minlength="6"></div>
+            <div class="field"><label>I am registering as…</label>
+              <select id="regRole" onchange="toggleRegFields()">
+                <option value="student">Student</option>
+                <option value="company">Company / Employer</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+            <div id="studentFields" class="field">
+              <label>Institution</label>
+              <select id="institution">
+                <option>Makerere University</option><option>Kyambogo University</option>
+                <option>MUBS</option><option>Ndejje University</option>
+                <option>Uganda Christian University</option><option>Gulu University</option>
+                <option>Mbarara University of Science & Technology</option><option>Other</option>
+              </select>
+            </div>
+            <div id="companyFields" style="display:none">
+              <div class="field"><label>Company Name</label><input type="text" id="companyName" placeholder="e.g., Stanbic Bank Uganda"></div>
+              <div class="field"><label>Location</label><input type="text" id="location" placeholder="e.g., Kampala, Entebbe"></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top:.5rem">Create Account</button>
+          </form>
+          <div class="form-footer">Already have an account? <span class="link" onclick="go('login')">Sign in</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDENT DASHBOARD -->
+    <section id="studentDashboard" class="section">
+      <div class="page-header">
+        <div class="page-eyebrow">Student Dashboard</div>
+        <h2 class="page-title">Hello, <span id="studentName">there</span></h2>
+        <p class="page-sub" id="studentInst"></p>
+      </div>
+      <div class="stats-row" id="studentStats"></div>
+      <div class="tab-bar">
+        <button class="tab active" onclick="switchTab(this,'st-browse')">Browse Internships</button>
+        <button class="tab" onclick="switchTab(this,'st-apps')">My Applications</button>
+        <button class="tab" onclick="switchTab(this,'st-logbook')">Logbook</button>
+      </div>
+      <div id="st-browse" class="tab-content active">
+        <div class="search-wrap"><span class="search-icon">Search</span><input type="text" placeholder="Search by title, company or location…" oninput="filterInternships(this.value)"></div>
+        <div class="grid" id="internshipsList"></div>
+      </div>
+      <div id="st-apps" class="tab-content"><div class="grid" id="myAppsList"></div></div>
+      <div id="st-logbook" class="tab-content">
+        <div class="panel" style="margin-bottom:2rem">
+          <div class="panel-title">Submit Daily Entry</div>
+          <form onsubmit="submitLogbook(event)">
+            <div class="field-row">
+              <div class="field"><label>Date</label><input type="date" id="logDate" required></div>
+              <div class="field"><label>Hours Worked</label><input type="number" id="logHours" min="1" max="12" placeholder="e.g. 8" required></div>
+            </div>
+            <div class="field"><label>Description of work done</label><textarea id="logDesc" rows="3" placeholder="Describe your tasks, activities and key learnings today…" required></textarea></div>
+            <button type="submit" id="logSubmitBtn" class="btn btn-primary">Submit Entry</button>
+          </form>
+        </div>
+        <div class="grid" id="logbookList"></div>
+      </div>
+    </section>
+
+    <!-- COMPANY DASHBOARD -->
+    <section id="companyDashboard" class="section">
+      <div class="page-header">
+        <div class="page-eyebrow">Company Dashboard</div>
+        <h2 class="page-title"><span id="companyDisp">Your Company</span></h2>
+        <p class="page-sub">Manage your internship listings and applicants</p>
+      </div>
+      <div class="stats-row" id="companyStats"></div>
+      <div class="tab-bar">
+        <button class="tab active" onclick="switchTab(this,'co-post')">Post Internship</button>
+        <button class="tab" onclick="switchTab(this,'co-listings')">My Listings</button>
+        <button class="tab" onclick="switchTab(this,'co-apps')">Applications</button>
+        <button class="tab" onclick="switchTab(this,'co-logbooks')">Logbook Review</button>
+      </div>
+      <div id="co-post" class="tab-content active">
+        <div class="panel">
+          <div class="panel-title">Post a New Internship</div>
+          <form onsubmit="postInternship(event)">
+            <div class="field"><label>Internship Title</label><input type="text" id="intTitle" placeholder="e.g., Software Engineering Intern" required></div>
+            <div class="field"><label>Description</label><textarea id="intDesc" rows="3" placeholder="Describe the role, team and day-to-day responsibilities…" required></textarea></div>
+            <div class="field-row">
+              <div class="field"><label>Duration</label><input type="text" id="intDuration" placeholder="e.g., 3 months" required></div>
+              <div class="field"><label>Monthly Stipend (UGX)</label><input type="text" id="intStipend" placeholder="e.g., 500,000"></div>
+            </div>
+            <div class="field"><label>Requirements</label><textarea id="intReqs" rows="2" placeholder="Skills, year of study, qualifications…"></textarea></div>
+            <button type="submit" class="btn btn-primary">Post Internship</button>
+          </form>
+        </div>
+      </div>
+      <div id="co-listings" class="tab-content"><div class="grid" id="coListings"></div></div>
+      <div id="co-apps" class="tab-content"><div class="grid" id="coApps"></div></div>
+
+      <div id="co-logbooks" class="tab-content">
+        <div style="background:var(--sky-lt);border:1px solid var(--sky);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.88rem;color:var(--sky);">
+          <strong>Logbook Review</strong> — These are daily work entries submitted by your placed interns. Review and approve each entry to confirm their hours.
+        </div>
+        <div class="grid" id="coLogbooks"></div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin" class="section">
+      <div class="page-header">
+        <div class="page-eyebrow">Administrator</div>
+        <h2 class="page-title">Admin Panel</h2>
+        <p class="page-sub">Manage all users, internships and placements</p>
+      </div>
+      <div class="stats-row" id="adminStats"></div>
+      <div class="tab-bar">
+        <button class="tab active" onclick="switchTab(this,'ad-users')">Users</button>
+        <button class="tab" onclick="switchTab(this,'ad-internships')">Internships</button>
+        <button class="tab" onclick="switchTab(this,'ad-placements')">Placements</button>
+      </div>
+      <div id="ad-users" class="tab-content active">
+        <div class="search-wrap"><span class="search-icon">Search</span><input type="text" placeholder="Filter by name, email or role…" oninput="filterUsers(this.value)"></div>
+        <div class="grid" id="usersList"></div>
+      </div>
+      <div id="ad-internships" class="tab-content"><div class="grid" id="adminInternships"></div></div>
+      <div id="ad-placements" class="tab-content"><div class="grid" id="adminPlacements"></div></div>
+    </section>
+
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════
+   InternUG — Frontend connected to MySQL backend
+   All data saved to http://localhost:5000
+══════════════════════════════════════════════ */
+
+const API = 'http://localhost:5000/api';
+let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+let token       = localStorage.getItem('token') || null;
+
+/* ── API HELPER ─────────────────────────────── */
+async function api(path, options = {}) {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    ...options
+  };
+  try {
+    const res = await fetch(API + path, config);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Server error');
+    return data;
+  } catch (err) {
+    toast(err.message, 'error');
+    throw err;
+  }
+}
+
+/* ── TOAST ──────────────────────────────────── */
+function toast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = type + ' show';
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 3800);
+}
+
+/* ── ROUTING ────────────────────────────────── */
+function go(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.section === id));
+  const titles = { login:'Welcome to InternUG', register:'Create Account', studentDashboard:'Student Dashboard', companyDashboard:'Company Dashboard', admin:'Admin Panel' };
+  document.getElementById('topbarTitle').textContent = titles[id] || 'InternUG';
+  document.getElementById('sidebar').classList.remove('open');
+  if (['studentDashboard','companyDashboard','admin'].includes(id)) {
+    if (!currentUser) { toast('Please sign in first', 'error'); go('login'); return; }
+    loadDash(id);
+  }
+}
+
+function switchTab(btn, id) {
+  btn.closest('.tab-bar').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.closest('.section').querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active'); document.getElementById(id).classList.add('active');
+}
+
+/* ── AUTH: REGISTER ─────────────────────────── */
+async function register(e) {
+  e.preventDefault();
+  const role = v('regRole');
+  const body = {
+    name:     v('regName'),
+    email:    v('regEmail'),
+    password: v('regPassword'),
+    role
+  };
+  if (role === 'student') body.institution = v('institution');
+  if (role === 'company') {
+    body.company_name = v('companyName');
+    body.location     = v('location');
+  }
+
+  try {
+    setBtn('registerBtn', true);
+    await api('/auth/register', { method:'POST', body: JSON.stringify(body) });
+    toast('Account created! Please sign in.', 'success');
+    e.target.reset(); go('login');
+  } catch(_) {}
+  finally { setBtn('registerBtn', false); }
+}
+
+/* ── AUTH: LOGIN ────────────────────────────── */
+async function login(e) {
+  e.preventDefault();
+  try {
+    setBtn('loginBtn', true);
+    const data = await api('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email: v('loginEmail'), password: v('loginPassword') })
+    });
+    token       = data.token;
+    currentUser = data.user;
+    localStorage.setItem('token',       token);
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    setSidebar(currentUser);
+    toast(`Welcome back, ${currentUser.name}!`, 'success');
+    go(currentUser.role === 'company' ? 'companyDashboard' : currentUser.role === 'admin' ? 'admin' : 'studentDashboard');
+  } catch(_) {}
+  finally { setBtn('loginBtn', false); }
+}
+
+/* ── AUTH: LOGOUT ───────────────────────────── */
+function logout() {
+  currentUser = null; token = null;
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem('token');
+  setSidebar(null); toast('Signed out successfully', 'info'); go('login');
+}
+
+function toggleRegFields() {
+  const role = v('regRole');
+  document.getElementById('studentFields').style.display = role === 'student' ? 'block' : 'none';
+  document.getElementById('companyFields').style.display = role === 'company' ? 'block' : 'none';
+}
+
+/* ── SIDEBAR ────────────────────────────────── */
+function setSidebar(user) {
+  const pill = document.getElementById('userPill');
+  const lb   = document.getElementById('logoutBtn');
+  const chip = document.getElementById('topbarChip');
+  if (!user) {
+    pill.style.display = 'none'; lb.style.display = 'none'; chip.style.display = 'none';
+    document.getElementById('navLinks').innerHTML = `<div class="nav-label">Navigation</div>
+      <button class="nav-link" data-section="login" onclick="go('login')"> Sign In</button>
+      <button class="nav-link" data-section="register" onclick="go('register')"> Register</button>`;
+    return;
+  }
+  document.getElementById('userAvatar').textContent = user.name[0].toUpperCase();
+  document.getElementById('pillName').textContent   = user.name;
+  document.getElementById('pillRole').textContent   = user.role;
+  pill.style.display = 'flex'; lb.style.display = 'flex';
+  chip.style.display = 'inline-block'; chip.textContent = cap(user.role);
+  const dests  = { student:'studentDashboard', company:'companyDashboard', admin:'admin' };
+  const labels = { student:'Dashboard', company:'Dashboard', admin:'Admin Panel' };
+  document.getElementById('navLinks').innerHTML = `<div class="nav-label">My Portal</div>
+    <button class="nav-link" data-section="${dests[user.role]}" onclick="go('${dests[user.role]}')">
+      ${labels[user.role]}</button>`;
+}
+
+/* ── LOAD DASHBOARD ─────────────────────────── */
+function loadDash(id) {
+  if (id === 'studentDashboard') {
+    document.getElementById('studentName').textContent = currentUser.name.split(' ')[0];
+    document.getElementById('studentInst').textContent = currentUser.institution || '';
+    rStudentStats(); rInternships(); rMyApps(); rLogbooks();
+    const ld = document.getElementById('logDate');
+    if (ld) ld.value = new Date().toISOString().split('T')[0];
+  } else if (id === 'companyDashboard') {
+    document.getElementById('companyDisp').textContent = currentUser.company_name || currentUser.name;
+    rCompanyStats(); rCoListings(); rCoApps(); rCoLogbooks();
+  } else if (id === 'admin') {
+    rAdminStats(); rUsers(); rAdminInternships(); rAdminPlacements();
+  }
+}
+
+/* ── STATS ──────────────────────────────────── */
+function sc(val, label) { return `<div class="stat-card"><div class="stat-val">${val}</div><div class="stat-label">${label}</div></div>`; }
+
+async function rStudentStats() {
+  try {
+    const [internships, myApps, myLogs] = await Promise.all([
+      api('/internships'),
+      api('/applications/mine'),
+      api('/logbooks/mine')
+    ]);
+    document.getElementById('studentStats').innerHTML =
+      sc(internships.length, 'Open Internships') +
+      sc(myApps.length, 'Applications Sent') +
+      sc(myApps.filter(a => a.status === 'approved').length, 'Approved') +
+      sc(myLogs.length, 'Logbook Entries');
+  } catch(_) {}
+}
+
+async function rCompanyStats() {
+  try {
+    const [listings, apps] = await Promise.all([
+      api('/internships/mine'),
+      api('/applications/company')
+    ]);
+    document.getElementById('companyStats').innerHTML =
+      sc(listings.length, 'Listings Posted') +
+      sc(apps.length, 'Applications') +
+      sc(apps.filter(a => a.status === 'pending').length, 'Pending') +
+      sc(apps.filter(a => a.status === 'approved').length, 'Approved');
+  } catch(_) {}
+}
+
+async function rAdminStats() {
+  try {
+    const stats = await api('/admin/stats');
+    document.getElementById('adminStats').innerHTML =
+      sc(stats.users, 'Total Users') +
+      sc(stats.internships, 'Internships') +
+      sc(stats.applications, 'Applications') +
+      sc(stats.placements, 'Placements');
+  } catch(_) {}
+}
+
+/* ── STUDENT: BROWSE INTERNSHIPS ────────────── */
+let _internships = [];
+async function rInternships(filter = '') {
+  const el = document.getElementById('internshipsList');
+  el.innerHTML = loading();
+  try {
+    if (!_internships.length) _internships = await api('/internships');
+    const myApps   = await api('/applications/mine');
+    const appliedIds = myApps.map(a => a.internship_id);
+    const list = _internships.filter(i =>
+      !filter ||
+      i.title.toLowerCase().includes(filter) ||
+      i.company_name.toLowerCase().includes(filter) ||
+      i.location.toLowerCase().includes(filter)
+    );
+    if (!list.length) { el.innerHTML = empt('No internships match your search'); return; }
+    el.innerHTML = list.map(i => {
+      const applied = appliedIds.includes(i.id);
+      return `<div class="card">
+        <div class="card-company">${i.company_name}</div>
+        <div class="card-title">${i.title}</div>
+        <div class="card-tags">
+          <span class="tag tag-green">${i.location}</span>
+          <span class="tag tag-blue">${i.duration}</span>
+          ${i.stipend ? `<span class="tag tag-gray">${i.stipend}</span>` : ''}
+        </div>
+        <div class="card-desc">${i.description}</div>
+        ${i.requirements ? `<div class="card-meta">${i.requirements}</div>` : ''}
+        <hr class="divider">
+        <div class="card-actions">
+          ${applied
+            ? `<span class="badge badge-approved">Applied</span>`
+            : `<button class="btn btn-primary btn-sm" onclick="applyTo(${i.id})">Apply Now</button>`}
+        </div>
+      </div>`;
+    }).join('');
+  } catch(_) { el.innerHTML = empt('Could not load internships. Is the server running?'); }
+}
+function filterInternships(val) { rInternships(val.toLowerCase()); }
+
+async function applyTo(id) {
+  try {
+    await api(`/applications/${id}`, { method: 'POST' });
+    toast('Application submitted!', 'success');
+    _internships = []; // refresh cache
+    rInternships(); rMyApps(); rStudentStats();
+  } catch(_) {}
+}
+
+/* ── STUDENT: MY APPLICATIONS ───────────────── */
+async function rMyApps() {
+  const el = document.getElementById('myAppsList');
+  el.innerHTML = loading();
+  try {
+    const apps = await api('/applications/mine');
+    if (!apps.length) { el.innerHTML = empt('No applications yet — browse internships to apply!'); return; }
+    el.innerHTML = apps.map(a => `<div class="card">
+      <div class="card-company">${a.company_name}</div>
+      <div class="card-title">${a.title}</div>
+      <div class="card-tags">
+        <span class="tag tag-green">${a.location}</span>
+        <span class="tag tag-blue">${a.duration}</span>
+      </div>
+      <div class="card-meta">Applied: ${fmt(a.applied_at)}</div>
+      <div class="card-actions"><span class="badge badge-${a.status}">${cap(a.status)}</span></div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load applications.'); }
+}
+
+/* ── STUDENT: LOGBOOK ───────────────────────── */
+async function submitLogbook(e) {
+  e.preventDefault();
+  try {
+    setBtn('logSubmitBtn', true);
+    await api('/logbooks', {
+      method: 'POST',
+      body: JSON.stringify({ date: v('logDate'), hours_worked: v('logHours'), description: v('logDesc') })
+    });
+    toast('Logbook entry submitted!', 'success');
+    e.target.reset();
+    document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+    rLogbooks(); rStudentStats();
+  } catch(_) {}
+  finally { setBtn('logSubmitBtn', false); }
+}
+
+async function rLogbooks() {
+  const el = document.getElementById('logbookList');
+  el.innerHTML = loading();
+  try {
+    const logs = await api('/logbooks/mine');
+    if (!logs.length) { el.innerHTML = empt('No entries yet — start recording your daily work!'); return; }
+    el.innerHTML = logs.map(l => `<div class="card">
+      <div class="card-title">${fmt(l.date)}</div>
+      <div class="card-tags">
+        <span class="tag tag-blue">${l.hours_worked} hours</span>
+        ${l.approved
+          ? `<span class="tag tag-green">Approved</span>`
+          : `<span class="tag tag-amber">Pending Review</span>`}
+      </div>
+      <div class="card-desc">${l.description}</div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load logbook entries.'); }
+}
+
+/* ── COMPANY: POST INTERNSHIP ───────────────── */
+async function postInternship(e) {
+  e.preventDefault();
+  try {
+    setBtn('postBtn', true);
+    await api('/internships', {
+      method: 'POST',
+      body: JSON.stringify({
+        title:        v('intTitle'),
+        description:  v('intDesc'),
+        duration:     v('intDuration'),
+        stipend:      v('intStipend'),
+        requirements: v('intReqs')
+      })
+    });
+    toast('Internship posted!', 'success');
+    e.target.reset(); rCoListings(); rCompanyStats();
+  } catch(_) {}
+  finally { setBtn('postBtn', false); }
+}
+
+/* ── COMPANY: LISTINGS ──────────────────────── */
+async function rCoListings() {
+  const el = document.getElementById('coListings');
+  el.innerHTML = loading();
+  try {
+    const list = await api('/internships/mine');
+    if (!list.length) { el.innerHTML = empt('No listings yet — post your first internship!'); return; }
+    const apps = await api('/applications/company');
+    el.innerHTML = list.map(i => {
+      const cnt = apps.filter(a => a.internship_id === i.id).length;
+      return `<div class="card">
+        <div class="card-title">${i.title}</div>
+        <div class="card-tags">
+          <span class="badge badge-${i.status === 'open' ? 'open' : 'closed'}">${cap(i.status)}</span>
+          <span class="tag tag-blue">${i.duration}</span>
+          ${i.stipend ? `<span class="tag tag-gray">${i.stipend}</span>` : ''}
+        </div>
+        <div class="card-desc">${i.description}</div>
+        <div class="card-meta">${cnt} application${cnt !== 1 ? 's' : ''}</div>
+        <div class="card-actions">
+          ${i.status === 'open'
+            ? `<button class="btn btn-ghost btn-sm" onclick="closeInt(${i.id})">Close Listing</button>`
+            : `<span class="tag tag-gray">Closed</span>`}
+        </div>
+      </div>`;
+    }).join('');
+  } catch(_) { el.innerHTML = empt('Could not load listings.'); }
+}
+
+async function closeInt(id) {
+  try {
+    await api(`/internships/${id}/close`, { method: 'PATCH' });
+    toast('Listing closed', 'info'); rCoListings(); rCompanyStats();
+  } catch(_) {}
+}
+
+/* ── COMPANY: APPLICATIONS ──────────────────── */
+async function rCoApps() {
+  const el = document.getElementById('coApps');
+  el.innerHTML = loading();
+  try {
+    const apps = await api('/applications/company');
+    const placed = await api('/placements/company');
+    const placedAppIds = placed.map(p => p.application_id);
+    if (!apps.length) { el.innerHTML = empt('No applications received yet.'); return; }
+    el.innerHTML = apps.map(app => `<div class="card">
+      <div class="card-company">Applied for: ${app.internship_title}</div>
+      <div class="card-title">${app.student_name}</div>
+      <div class="card-meta">${app.institution || '—'}</div>
+      <div class="card-meta">${app.student_email}</div>
+      <div class="card-meta">Applied: ${fmt(app.applied_at)}</div>
+      <div class="card-actions">
+        <span class="badge badge-${app.status}">${cap(app.status)}</span>
+        ${app.status === 'pending' ? `
+          <button class="btn btn-primary btn-sm" onclick="approveApp(${app.id})">Approve</button>
+          <button class="btn btn-danger btn-sm"  onclick="rejectApp(${app.id})">Reject</button>` : ''}
+        ${app.status === 'approved' && !placedAppIds.includes(app.id) ? `
+          <button class="btn btn-outline btn-sm" onclick="doPlace(${app.id})">Create Placement</button>` : ''}
+        ${placedAppIds.includes(app.id) ? `<span class="badge badge-active">Placed</span>` : ''}
+      </div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load applications.'); }
+}
+
+async function approveApp(id) {
+  try {
+    await api(`/applications/${id}/approve`, { method: 'PATCH' });
+    toast('Application approved!', 'success'); rCoApps(); rCompanyStats();
+  } catch(_) {}
+}
+
+async function rejectApp(id) {
+  try {
+    await api(`/applications/${id}/reject`, { method: 'PATCH' });
+    toast('Application rejected', 'info'); rCoApps(); rCompanyStats();
+  } catch(_) {}
+}
+
+async function doPlace(appId) {
+  try {
+    await api('/placements', { method: 'POST', body: JSON.stringify({ application_id: appId }) });
+    toast('Intern placed!', 'success'); rCoApps(); rCompanyStats();
+  } catch(_) {}
+}
+
+/* ── COMPANY: LOGBOOK REVIEW ────────────────── */
+async function rCoLogbooks() {
+  const el = document.getElementById('coLogbooks');
+  el.innerHTML = loading();
+  try {
+    const logs = await api('/logbooks/company');
+    if (!logs.length) { el.innerHTML = empt('No logbook entries yet from your placed interns.'); return; }
+    el.innerHTML = logs.map(l => `<div class="card">
+      <div class="card-company">${l.student_name} · ${l.institution || '—'}</div>
+      <div class="card-title">${fmt(l.date)}</div>
+      <div class="card-tags">
+        <span class="tag tag-blue">${l.hours_worked} hours</span>
+        ${l.approved
+          ? `<span class="tag tag-green">Approved by you</span>`
+          : `<span class="tag tag-amber">Awaiting your approval</span>`}
+      </div>
+      <div class="card-desc">${l.description}</div>
+      <div class="card-actions">
+        ${!l.approved
+          ? `<button class="btn btn-primary btn-sm" onclick="approveLogbook(${l.id})">Approve Entry</button>`
+          : `<span style="font-size:.8rem;color:var(--text3)">Approved</span>`}
+      </div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load logbook entries.'); }
+}
+
+async function approveLogbook(id) {
+  try {
+    await api(`/logbooks/${id}/approve`, { method: 'PATCH' });
+    toast('Logbook entry approved!', 'success'); rCoLogbooks();
+  } catch(_) {}
+}
+
+/* ── ADMIN: USERS ───────────────────────────── */
+let _allUsers = [];
+async function rUsers(filter = '') {
+  const el = document.getElementById('usersList');
+  el.innerHTML = loading();
+  try {
+    if (!_allUsers.length) _allUsers = await api('/admin/users');
+    const list = _allUsers.filter(u =>
+      !filter ||
+      u.name.toLowerCase().includes(filter) ||
+      u.role.includes(filter) ||
+      u.email.includes(filter)
+    );
+    if (!list.length) { el.innerHTML = empt('No users found'); return; }
+    el.innerHTML = list.map(u => `<div class="card">
+      <div class="card-title">${u.name}</div>
+      <div class="card-tags"><span class="tag ${rtag(u.role)}">${cap(u.role)}</span></div>
+      <div class="card-meta">${u.email}</div>
+      ${u.institution   ? `<div class="card-meta">${u.institution}</div>` : ''}
+      ${u.company_name  ? `<div class="card-meta">${u.company_name}, ${u.location}</div>` : ''}
+      <div class="card-actions">
+        <button class="btn btn-danger btn-sm" onclick="delUser(${u.id})">Delete</button>
+      </div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load users.'); }
+}
+
+function filterUsers(f) { rUsers(f.toLowerCase()); }
+
+async function delUser(id) {
+  if (!confirm('Delete this user?')) return;
+  try {
+    await api(`/admin/users/${id}`, { method: 'DELETE' });
+    toast('User deleted', 'info');
+    _allUsers = []; rUsers(); rAdminStats();
+  } catch(_) {}
+}
+
+/* ── ADMIN: INTERNSHIPS ─────────────────────── */
+async function rAdminInternships() {
+  const el = document.getElementById('adminInternships');
+  el.innerHTML = loading();
+  try {
+    const list = await api('/internships');
+    if (!list.length) { el.innerHTML = empt('No internships yet'); return; }
+    el.innerHTML = list.map(i => `<div class="card">
+      <div class="card-company">${i.company_name}</div>
+      <div class="card-title">${i.title}</div>
+      <div class="card-tags">
+        <span class="badge badge-${i.status === 'open' ? 'open' : 'closed'}">${cap(i.status)}</span>
+        <span class="tag tag-gray">${i.location}</span>
+      </div>
+      <div class="card-meta">${i.duration}${i.stipend ? ' · ' + i.stipend : ''}</div>
+      <div class="card-actions">
+        <button class="btn btn-danger btn-sm" onclick="delInt(${i.id})">Delete</button>
+      </div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load internships.'); }
+}
+
+async function delInt(id) {
+  if (!confirm('Delete this internship?')) return;
+  try {
+    await api(`/internships/${id}`, { method: 'DELETE' });
+    toast('Internship deleted', 'info'); rAdminInternships(); rAdminStats();
+  } catch(_) {}
+}
+
+/* ── ADMIN: PLACEMENTS ──────────────────────── */
+async function rAdminPlacements() {
+  const el = document.getElementById('adminPlacements');
+  el.innerHTML = loading();
+  try {
+    const list = await api('/placements');
+    if (!list.length) { el.innerHTML = empt('No placements recorded yet'); return; }
+    el.innerHTML = list.map(p => `<div class="card">
+      <div class="card-company">${p.company_name}</div>
+      <div class="card-title">${p.student_name}</div>
+      <div class="card-meta">${p.institution || '—'}</div>
+      <div class="card-meta">${p.internship_title}</div>
+      <div class="card-meta">Start: ${fmt(p.start_date)}</div>
+      <div class="card-tags"><span class="badge badge-active">${cap(p.status)}</span></div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load placements.'); }
+}
+
+/* ── HELPERS ────────────────────────────────── */
+const v      = id => document.getElementById(id)?.value || '';
+const cap    = s  => s ? s[0].toUpperCase() + s.slice(1) : '';
+const empt   = msg => `<div class="empty"><p class="empty-msg">${msg}</p></div>`;
+const loading= ()  => `<div class="empty"><p class="empty-msg" style="color:var(--text3)">Loading…</p></div>`;
+const rtag   = r   => ({ student:'tag-blue', company:'tag-green', admin:'tag-amber' }[r] || 'tag-gray');
+const fmt    = d   => d ? new Date(d).toLocaleDateString('en-UG', { day:'numeric', month:'short', year:'numeric' }) : '—';
+
+function setBtn(id, disabled) {
+  const btn = document.getElementById(id);
+  if (btn) { btn.disabled = disabled; btn.textContent = disabled ? 'Please wait…' : btn.dataset.label || btn.textContent; }
+}
+
+/* ── INIT ───────────────────────────────────── */
+if (currentUser && token) {
+  setSidebar(currentUser);
+  go(currentUser.role === 'company' ? 'companyDashboard' : currentUser.role === 'admin' ? 'admin' : 'studentDashboard');
+} else {
+  setSidebar(null);
+  go('login');
+}
+</script>
+</body>
+</html>

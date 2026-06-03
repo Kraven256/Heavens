@@ -94,6 +94,23 @@ const API_BASE = 'http://localhost:5000';
 
 ---
 
+## New features (logbooks, letters, emails)
+
+Run this once in Supabase SQL Editor if your database was created before these features:
+
+```sql
+-- See backend/database/add_features.sql
+ALTER TABLE placements ADD COLUMN IF NOT EXISTS end_date DATE;
+ALTER TABLE placements ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ;
+ALTER TABLE logbooks ADD COLUMN IF NOT EXISTS supervisor_note TEXT;
+```
+
+- **Logbook records**: All entries are stored permanently. Students can filter and export CSV. Companies and admins can browse archives.
+- **Completion letters**: Companies (or admin) mark a placement **Completed** → students download a printable letter from the **Placement** tab.
+- **Email notifications**: When a company approves or rejects an application, the student receives an email (via Resend).
+
+---
+
 ## Troubleshooting
 | Problem | Fix |
 |---|---|

@@ -7,11 +7,15 @@ const router = express.Router();
 // GET /api/admin/users — all users
 router.get('/users', authenticateToken, authorizeRole(['admin']), async (req, res) => {
   try {
-    const pool = req.app.locals.pool;
-    const [rows] = await pool.execute(
-      'SELECT id, name, email, role, institution, company_name, location, created_at FROM users ORDER BY created_at DESC'
-    );
-    res.json(rows);
+    const supabase = req.app.locals.supabase;
+
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, name, email, role, institution, company_name, location, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -20,11 +24,18 @@ router.get('/users', authenticateToken, authorizeRole(['admin']), async (req, re
 // DELETE /api/admin/users/:id — delete a user
 router.delete('/users/:id', authenticateToken, authorizeRole(['admin']), async (req, res) => {
   try {
-    const pool = req.app.locals.pool;
+    const supabase = req.app.locals.supabase;
+
     if (parseInt(req.params.id) === req.user.id) {
-      return res.status(400).json({ error: "You cannot delete your own account." });
+      return res.status(400).json({ error: 'You cannot delete your own account.' });
     }
-    await pool.execute('DELETE FROM users WHERE id = ?', [req.params.id]);
+
+    const { error } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', req.params.id);
+
+    if (error) throw error;
     res.json({ message: 'User deleted.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -34,11 +45,20 @@ router.delete('/users/:id', authenticateToken, authorizeRole(['admin']), async (
 // GET /api/admin/stats — dashboard stats
 router.get('/stats', authenticateToken, authorizeRole(['admin']), async (req, res) => {
   try {
-    const pool = req.app.locals.pool;
-    const [[{ users }]]        = await pool.execute('SELECT COUNT(*) AS users FROM users');
-    const [[{ internships }]]  = await pool.execute('SELECT COUNT(*) AS internships FROM internships');
-    const [[{ applications }]] = await pool.execute('SELECT COUNT(*) AS applications FROM applications');
-    const [[{ placements }]]   = await pool.execute('SELECT COUNT(*) AS placements FROM placements');
+    const supabase = req.app.locals.supabase;
+
+    const [
+      { count: users },
+      { count: internships },
+      { count: applications },
+      { count: placements },
+    ] = await Promise.all([
+      supabase.from('users').select('*', { count: 'exact', head: true }),
+      supabase.from('internships').select('*', { count: 'exact', head: true }),
+      supabase.from('applications').select('*', { count: 'exact', head: true }),
+      supabase.from('placements').select('*', { count: 'exact', head: true }),
+    ]);
+
     res.json({ users, internships, applications, placements });
   } catch (err) {
     res.status(500).json({ error: err.message });

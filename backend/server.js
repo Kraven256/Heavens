@@ -1,42 +1,49 @@
 // ================================================
 //  InternUG — Main Express Server
+//  Database: Supabase (PostgreSQL)
 // ================================================
-const express = require('express');
-const cors    = require('cors');
-const mysql   = require('mysql2/promise');
+const express               = require('express');
+const cors                  = require('cors');
+const { createClient }      = require('@supabase/supabase-js');
+const ws                    = require('ws');   // Required for Node.js < 22
 require('dotenv').config();
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
+
+// ── Validate required env vars ───────────────────
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+  console.error('❌ SUPABASE_URL and SUPABASE_SERVICE_KEY must be set in .env');
+  process.exit(1);
+}
 
 // ── Middleware ───────────────────────────────────
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── Shared Database Pool ─────────────────────────
-const pool = mysql.createPool({
-  host:               process.env.DB_HOST || 'localhost',
-  user:               process.env.DB_USER || 'root',
-  password:           process.env.DB_PASS || '',
-  database:           process.env.DB_NAME || 'internship_management',
-  waitForConnections: true,
-  connectionLimit:    10,
-  queueLimit:         0
-});
+// ── Supabase Client (service-role — bypasses RLS) ─
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY,
+  {
+    auth:     { persistSession: false },
+    realtime: { transport: ws },          // Node.js 20 WebSocket fix
+  }
+);
 
-// Make pool available to all route files
-app.locals.pool = pool;
+// Make supabase client available to all route files
+app.locals.supabase = supabase;
 
-// Test DB connection on startup
+// Test Supabase connection on startup
 async function testConnection() {
   try {
-    const conn = await pool.getConnection();
-    console.log('✅ MySQL connected successfully');
-    conn.release();
+    const { error } = await supabase.from('users').select('id').limit(1);
+    if (error) throw error;
+    console.log('✅ Supabase connected successfully');
   } catch (err) {
-    console.error('❌ MySQL connection failed:', err.message);
-    console.error('   Make sure MySQL is running in XAMPP and your .env is correct.');
+    console.error('❌ Supabase connection failed:', err.message);
+    console.error('   Check SUPABASE_URL and SUPABASE_SERVICE_KEY in .env');
   }
 }
 
@@ -50,14 +57,15 @@ app.use('/api/admin',        require('./routes/admin'));
 
 // ── Health Check ─────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'InternUG backend is running!' });
+  res.json({ status: 'OK', message: 'InternUG backend is running!', db: 'Supabase' });
 });
 
 // ── DB Test ──────────────────────────────────────
 app.get('/api/test-db', async (req, res) => {
   try {
-    const [rows] = await pool.execute('SELECT 1 AS test');
-    res.json({ success: true, message: 'Database connected!' });
+    const { error } = await supabase.from('users').select('id').limit(1);
+    if (error) throw error;
+    res.json({ success: true, message: 'Supabase connected!', provider: 'Supabase' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -82,4 +90,4 @@ app.listen(PORT, () => {
   console.log(`🗄  DB test:      http://localhost:${PORT}/api/test-db\n`);
 });
 
-module.exports = { app, pool };
+module.exports = { app, supabase };

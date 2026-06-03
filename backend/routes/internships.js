@@ -4,17 +4,29 @@ const { authenticateToken, authorizeRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// GET /api/internships — all open internships (students see this)
+// GET /api/internships — all open internships with company info (students see this)
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const pool = req.app.locals.pool;
-    const [rows] = await pool.execute(`
-      SELECT i.*, u.company_name, u.location
-      FROM internships i
-      JOIN users u ON i.company_id = u.id
-      WHERE i.status = 'open'
-      ORDER BY i.created_at DESC
-    `);
+    const supabase = req.app.locals.supabase;
+
+    const { data, error } = await supabase
+      .from('internships')
+      .select(`
+        *,
+        company:users!company_id (company_name, location)
+      `)
+      .eq('status', 'open')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    // Flatten nested company object to match original API shape
+    const rows = (data || []).map(({ company, ...i }) => ({
+      ...i,
+      company_name: company?.company_name ?? null,
+      location:     company?.location     ?? null,
+    }));
+
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -24,12 +36,16 @@ router.get('/', authenticateToken, async (req, res) => {
 // GET /api/internships/mine — company's own listings
 router.get('/mine', authenticateToken, authorizeRole(['company']), async (req, res) => {
   try {
-    const pool = req.app.locals.pool;
-    const [rows] = await pool.execute(
-      'SELECT * FROM internships WHERE company_id = ? ORDER BY created_at DESC',
-      [req.user.id]
-    );
-    res.json(rows);
+    const supabase = req.app.locals.supabase;
+
+    const { data, error } = await supabase
+      .from('internships')
+      .select('*')
+      .eq('company_id', req.user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -39,16 +55,25 @@ router.get('/mine', authenticateToken, authorizeRole(['company']), async (req, r
 router.post('/', authenticateToken, authorizeRole(['company']), async (req, res) => {
   try {
     const { title, description, duration, stipend, requirements } = req.body;
-    const pool = req.app.locals.pool;
+    const supabase = req.app.locals.supabase;
 
     if (!title) return res.status(400).json({ error: 'Title is required.' });
 
-    const [result] = await pool.execute(
-      `INSERT INTO internships (title, description, duration, stipend, requirements, company_id)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [title, description || null, duration || null, stipend || null, requirements || null, req.user.id]
-    );
-    res.status(201).json({ id: result.insertId, message: 'Internship posted successfully.' });
+    const { data, error } = await supabase
+      .from('internships')
+      .insert({
+        title,
+        description:  description  || null,
+        duration:     duration     || null,
+        stipend:      stipend      || null,
+        requirements: requirements || null,
+        company_id:   req.user.id,
+      })
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    res.status(201).json({ id: data.id, message: 'Internship posted successfully.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -57,11 +82,15 @@ router.post('/', authenticateToken, authorizeRole(['company']), async (req, res)
 // PATCH /api/internships/:id/close — close a listing (company only)
 router.patch('/:id/close', authenticateToken, authorizeRole(['company']), async (req, res) => {
   try {
-    const pool = req.app.locals.pool;
-    await pool.execute(
-      'UPDATE internships SET status = "closed" WHERE id = ? AND company_id = ?',
-      [req.params.id, req.user.id]
-    );
+    const supabase = req.app.locals.supabase;
+
+    const { error } = await supabase
+      .from('internships')
+      .update({ status: 'closed' })
+      .eq('id', req.params.id)
+      .eq('company_id', req.user.id);
+
+    if (error) throw error;
     res.json({ message: 'Listing closed.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -71,8 +100,14 @@ router.patch('/:id/close', authenticateToken, authorizeRole(['company']), async 
 // DELETE /api/internships/:id — admin only
 router.delete('/:id', authenticateToken, authorizeRole(['admin']), async (req, res) => {
   try {
-    const pool = req.app.locals.pool;
-    await pool.execute('DELETE FROM internships WHERE id = ?', [req.params.id]);
+    const supabase = req.app.locals.supabase;
+
+    const { error } = await supabase
+      .from('internships')
+      .delete()
+      .eq('id', req.params.id);
+
+    if (error) throw error;
     res.json({ message: 'Internship deleted.' });
   } catch (err) {
     res.status(500).json({ error: err.message });

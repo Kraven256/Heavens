@@ -4,39 +4,219 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>InternUG — Uganda Internship Placement Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --forest:#1a3d2b; --green:#2d6a4f; --mint:#52b788;
-  --cream:#faf7f2; --paper:#ffffff; --sand:#f0ebe0;
-  --border:#e0d9cc; --text:#1a1a1a; --text2:#4a4a4a; --text3:#8a8a8a;
-  --amber:#e07a5f; --amber-lt:#fdebd7; --sky:#3a7fbd; --sky-lt:#dbeafe;
-  --mint-lt:#d8f3dc; --r:16px; --r-lg:24px;
-  --shadow:0 2px 16px rgba(26,61,43,.07);
-  --shadow-lg:0 8px 40px rgba(26,61,43,.13);
-  --sidebar:280px; --font:'Sora',sans-serif; --display:'Fraunces',serif;
+  --forest:#0f172a; --green:#1e293b; --mint:#d97706;
+  --cream:#f8fafc; --paper:#ffffff; --sand:#f1f5f9;
+  --border:#e2e8f0; --text:#0f172a; --text2:#334155; --text3:#64748b;
+  --amber:#d97706; --amber-lt:#fef3c7; --sky:#0284c7; --sky-lt:#e0f2fe;
+  --mint-lt:#fef3c7; --r:16px; --r-lg:24px;
+  --shadow:0 2px 16px rgba(15,23,42,.06);
+  --shadow-lg:0 8px 40px rgba(15,23,42,.12);
+  --sidebar:280px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --display:var(--font);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:15px;}
 body{font-family:var(--font);background:var(--cream);color:var(--text);display:flex;min-height:100vh;line-height:1.65;}
 
+/* AUTH FULL-SCREEN MODE — hide topbar, zero content padding */
+body.auth-mode .topbar{display:none;}
+body.auth-mode .content{padding:0;max-width:100%;}
+body.auth-mode .main-wrap{min-height:100vh;}
+
+/* HOME LANDING — full-bleed, no sidebar */
+body.home-mode .sidebar{transform:translateX(-100%);}
+body.home-mode .main-wrap{margin-left:0;}
+body.home-mode .topbar{display:none;}
+body.home-mode .content{padding:0;max-width:100%;}
+.home-page{min-height:100vh;overflow-x:hidden;}
+.home-nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 2.5rem;
+  background:linear-gradient(180deg,rgba(15,23,42,.92) 0%,rgba(15,23,42,0) 100%);
+  transition:background .25s,box-shadow .25s;
+}
+.home-nav.scrolled{
+  background:rgba(26,39,68,.97);
+  backdrop-filter:blur(12px);
+  box-shadow:0 4px 24px rgba(0,0,0,.15);
+}
+.home-nav-brand{display:flex;align-items:center;gap:.85rem;text-decoration:none;}
+.home-nav-icon{width:42px;height:42px;background:var(--mint);border-radius:12px;display:grid;place-items:center;font-size:1.2rem;box-shadow:0 4px 12px rgba(74,127,212,.35);}
+.home-nav-name{font-family:var(--display);font-size:1.35rem;color:#fff;line-height:1;}
+.home-nav-links{display:flex;align-items:center;gap:.5rem;}
+.home-nav-links a,.home-nav-links button{
+  font-family:var(--font);font-size:.88rem;font-weight:600;
+  color:rgba(255,255,255,.8);text-decoration:none;
+  padding:.55rem 1rem;border-radius:10px;
+  background:none;border:none;cursor:pointer;transition:color .15s,background .15s;
+}
+.home-nav-links a:hover,.home-nav-links button:hover{color:#fff;background:rgba(255,255,255,.08);}
+.home-nav-cta{background:var(--mint)!important;color:var(--forest)!important;font-weight:700!important;}
+.home-nav-cta:hover{background:#6b9ef0!important;transform:translateY(-1px);}
+.home-hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;
+  padding:7rem 2.5rem 5rem;
+  background:url('bg.png') center center/cover no-repeat;
+}
+.home-hero::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(125deg,rgba(15,23,42,.88) 0%,rgba(26,39,68,.75) 45%,rgba(20,35,60,.6) 100%);
+}
+.home-hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1.1fr .9fr;gap:3.5rem;align-items:center;}
+.home-hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(74,127,212,.2);border:1px solid rgba(74,127,212,.4);
+  color:var(--mint);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  padding:.45rem 1rem;border-radius:999px;margin-bottom:1.25rem;
+}
+.home-hero h1{
+  font-family:var(--display);font-size:clamp(2.4rem,5vw,3.75rem);
+  line-height:1.08;color:#fff;margin-bottom:1.25rem;font-style:italic;
+}
+.home-hero h1 em{font-style:normal;color:var(--mint);}
+.home-hero-lead{font-size:1.05rem;color:rgba(255,255,255,.72);line-height:1.7;max-width:32rem;margin-bottom:2rem;}
+.home-hero-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem;}
+.home-hero-actions .btn{padding:1rem 1.75rem;font-size:.95rem;}
+.btn-hero-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);}
+.btn-hero-outline:hover{background:rgba(255,255,255,.1);border-color:#fff;color:#fff;}
+.home-hero-stats{display:flex;flex-wrap:wrap;gap:2rem;}
+.home-hero-stat strong{display:block;font-family:var(--display);font-size:1.85rem;color:#fff;line-height:1;}
+.home-hero-stat span{font-size:.78rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
+.home-hero-visual{position:relative;}
+.home-hero-card{
+  background:rgba(255,255,255,.1);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.15);border-radius:var(--r-lg);
+  padding:2rem;box-shadow:0 24px 64px rgba(0,0,0,.35);
+}
+.home-hero-card h3{font-family:var(--display);font-size:1.25rem;color:#fff;margin-bottom:1.25rem;font-style:italic;}
+.home-mini-list{display:flex;flex-direction:column;gap:1rem;}
+.home-mini-item{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:1rem;background:rgba(255,255,255,.06);border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.home-mini-icon{width:40px;height:40px;border-radius:10px;background:var(--mint);color:var(--forest);display:grid;place-items:center;font-size:1.1rem;flex-shrink:0;}
+.home-mini-item strong{display:block;color:#fff;font-size:.9rem;margin-bottom:.2rem;}
+.home-mini-item span{font-size:.8rem;color:rgba(255,255,255,.55);line-height:1.5;}
+.home-section{padding:5rem 2.5rem;max-width:1200px;margin:0 auto;}
+.home-section-alt{background:var(--sand);max-width:none;}
+.home-section-alt .home-section-inner{max-width:1200px;margin:0 auto;}
+.home-section-head{text-align:center;margin-bottom:3rem;}
+.home-section-head .page-eyebrow{color:var(--green);}
+.home-section-head .page-title{font-size:clamp(1.75rem,3vw,2.4rem);}
+.home-features{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.home-feature{
+  background:var(--paper);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:2rem 1.75rem;transition:transform .2s,box-shadow .2s,border-color .2s;
+}
+.home-feature:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--mint);}
+.home-feature-icon{font-size:2rem;margin-bottom:1rem;}
+.home-feature h3{font-size:1.05rem;font-weight:700;color:var(--forest);margin-bottom:.5rem;}
+.home-feature p{font-size:.88rem;color:var(--text2);line-height:1.65;}
+.home-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;counter-reset:step;}
+.home-step{
+  text-align:center;padding:1.75rem 1.25rem;
+  background:var(--paper);border-radius:var(--r-lg);border:1px solid var(--border);
+  position:relative;
+}
+.home-step-num{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--mint),var(--green));
+  color:#fff;font-weight:800;font-size:1.1rem;
+  display:grid;place-items:center;margin:0 auto 1rem;
+  box-shadow:0 4px 14px rgba(43,76,140,.3);
+}
+.home-step h4{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.4rem;}
+.home-step p{font-size:.82rem;color:var(--text3);line-height:1.55;}
+.home-audience{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.home-audience-card{
+  border-radius:var(--r-lg);padding:2rem 1.75rem;color:#fff;
+  display:flex;flex-direction:column;gap:.75rem;min-height:220px;
+}
+.home-audience-card.student{background:linear-gradient(145deg,var(--green),var(--forest));}
+.home-audience-card.company{background:linear-gradient(145deg,#2a5f8f,var(--sky));}
+.home-audience-card.admin{background:linear-gradient(145deg,#8b5a2b,var(--amber));}
+.home-audience-card .tag{align-self:flex-start;background:rgba(255,255,255,.2);color:#fff;border:none;}
+.home-audience-card h3{font-family:var(--display);font-size:1.35rem;font-style:italic;}
+.home-audience-card p{font-size:.88rem;opacity:.85;line-height:1.6;flex:1;}
+.home-audience-card .btn{align-self:flex-start;margin-top:.5rem;background:#fff;color:var(--forest);}
+.home-audience-card.company .btn{color:var(--sky);}
+.home-audience-card.admin .btn{color:var(--amber);}
+.home-cta-band{
+  margin:0 2.5rem 5rem;max-width:calc(1200px + 5rem);margin-left:auto;margin-right:auto;
+  background:linear-gradient(135deg,var(--forest) 0%,var(--green) 100%);
+  border-radius:var(--r-lg);padding:3.5rem 3rem;text-align:center;
+  box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+}
+.home-cta-band::before{
+  content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(74,127,212,.25) 0%,transparent 70%);
+  pointer-events:none;
+}
+.home-cta-band h2{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.2rem);color:#fff;font-style:italic;margin-bottom:.75rem;position:relative;}
+.home-cta-band p{color:rgba(255,255,255,.7);font-size:.95rem;margin-bottom:1.75rem;max-width:480px;margin-left:auto;margin-right:auto;position:relative;}
+.home-cta-band .home-hero-actions{justify-content:center;margin-bottom:0;position:relative;}
+.home-footer{
+  background:var(--forest);color:rgba(255,255,255,.5);
+  padding:2.5rem;text-align:center;font-size:.82rem;
+}
+.home-footer strong{color:var(--mint);font-family:var(--display);font-size:1rem;display:block;margin-bottom:.35rem;}
+#features,#how-it-works,#internship-showcase{scroll-margin-top:5rem;}
+
+@media(max-width:900px){
+  .home-hero-inner{grid-template-columns:1fr;gap:2rem;}
+  .home-hero-visual{order:-1;}
+  .home-features,.home-audience{grid-template-columns:1fr;}
+  .home-steps{grid-template-columns:repeat(2,1fr);}
+  .home-nav{padding:1rem 1.25rem;}
+  .home-nav-links .nav-hide-mobile{display:none;}
+  .home-section{padding:3.5rem 1.25rem;}
+  .home-cta-band{margin:0 1.25rem 3rem;padding:2.5rem 1.5rem;}
+}
+@media(max-width:500px){
+  .home-steps{grid-template-columns:1fr;}
+  .home-hero{padding:6rem 1.25rem 3rem;}
+}
+
 /* SIDEBAR */
 .sidebar{width:var(--sidebar);background:var(--forest);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;}
 .sidebar-top{padding:2rem 1.5rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.08);}
 .brand{display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;}
-.brand-icon{width:48px;height:48px;background:var(--mint);border-radius:14px;display:grid;place-items:center;font-size:1.4rem;flex-shrink:0;box-shadow:0 4px 12px rgba(82,183,136,.4);}
+.brand-icon{width:48px;height:48px;background:var(--mint);border-radius:14px;display:grid;place-items:center;font-size:1.4rem;flex-shrink:0;box-shadow:0 4px 12px rgba(74,127,212,.4);}
 .brand-name{font-family:var(--display);font-size:1.45rem;color:#fff;line-height:1.1;}
 .brand-sub{font-size:.68rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
 .user-pill{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:1rem 1.1rem;display:none;align-items:center;gap:.85rem;}
-.user-avatar{width:40px;height:40px;border-radius:50%;background:var(--mint);color:var(--forest);display:grid;place-items:center;font-weight:800;font-size:.95rem;flex-shrink:0;}
+.user-avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--mint);color:var(--forest);
+  display:grid;place-items:center;
+  font-weight:800;font-size:1rem;flex-shrink:0;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:box-shadow .2s;
+  box-shadow:0 0 0 2px rgba(74,127,212,.0);
+}
+.user-avatar:hover{box-shadow:0 0 0 2px var(--mint);}
+.user-avatar::after{
+  content:'📷';
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.55);
+  display:grid;place-items:center;
+  font-size:.9rem;
+  opacity:0;transition:opacity .18s;
+  border-radius:50%;
+}
+.user-avatar:hover::after{opacity:1;}
 .pill-name{font-size:.88rem;font-weight:600;color:#fff;}
 .pill-role{font-size:.65rem;color:var(--mint);text-transform:uppercase;letter-spacing:.07em;font-weight:700;}
 .nav-section{padding:1.25rem 1rem;flex:1;}
 .nav-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);font-weight:700;padding:0 .5rem;margin-bottom:.6rem;}
 .nav-link{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;border-radius:12px;cursor:pointer;font-size:.9rem;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;transition:all .18s;margin-bottom:.2rem;user-select:none;border:none;background:none;width:100%;text-align:left;font-family:var(--font);}
 .nav-link:hover{background:rgba(255,255,255,.08);color:#fff;}
-.nav-link.active{background:var(--mint);color:var(--forest);font-weight:700;box-shadow:0 4px 12px rgba(82,183,136,.3);}
+.nav-link.active{background:var(--mint);color:var(--forest);font-weight:700;box-shadow:0 4px 12px rgba(217,119,6,.35);}
 .nav-link .icon{font-size:1.1rem;flex-shrink:0;}
 .sidebar-footer{padding:1.25rem 1rem 1.5rem;border-top:1px solid rgba(255,255,255,.07);}
 .logout-btn{display:none;align-items:center;gap:.6rem;width:100%;background:rgba(224,122,95,.15);border:1px solid rgba(224,122,95,.25);color:#fca090;padding:.8rem 1rem;border-radius:12px;cursor:pointer;font-family:var(--font);font-size:.88rem;font-weight:600;transition:all .18s;}
@@ -56,18 +236,80 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
 @keyframes slideUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
 /* AUTH */
-.auth-wrap{min-height:calc(100vh - 80px);display:flex;align-items:center;justify-content:center;padding:2rem 0;}
-.auth-card{background:var(--paper);border-radius:var(--r-lg);padding:3rem;width:100%;max-width:480px;box-shadow:var(--shadow-lg);border:1px solid var(--border);}
+.auth-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem 1rem;
+  position:relative;
+  /* Full-bleed campus background */
+  background:url('bg.png') center center / cover no-repeat;
+  /* Stretch behind sidebar too when sidebar is visible */
+  margin-left:calc(-1 * var(--sidebar));
+  padding-left:calc(var(--sidebar) + 2rem);
+}
+.auth-wrap::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    135deg,
+    rgba(15,23,42,.78) 0%,
+    rgba(26,39,68,.68) 40%,
+    rgba(20,32,55,.55) 100%
+  );
+  backdrop-filter:blur(1px);
+}
+.auth-card{
+  position:relative;
+  z-index:1;
+  background:rgba(255,255,255,.10);
+  backdrop-filter:blur(20px) saturate(1.4);
+  -webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:var(--r-lg);
+  padding:3rem;
+  width:100%;
+  max-width:480px;
+  box-shadow:0 24px 64px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.15);
+}
 .auth-eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--mint);font-weight:700;margin-bottom:.5rem;}
-.auth-title{font-family:var(--display);font-size:2.2rem;line-height:1.15;color:var(--text);margin-bottom:.4rem;}
-.auth-sub{color:var(--text3);font-size:.9rem;margin-bottom:2rem;}
+.auth-title{font-family:var(--display);font-size:2.2rem;line-height:1.15;color:#fff;margin-bottom:.4rem;}
+.auth-sub{color:rgba(255,255,255,.6);font-size:.9rem;margin-bottom:2rem;}
+/* Override form text colours inside auth-card for readability on dark glass */
+.auth-card .field label{color:rgba(255,255,255,.75);}
+.auth-card .field input,
+.auth-card .field select,
+.auth-card .field textarea{
+  background:rgba(255,255,255,.1);
+  border-color:rgba(255,255,255,.2);
+  color:#fff;
+}
+.auth-card .field input::placeholder{color:rgba(255,255,255,.38);}
+.auth-card .field input:focus,
+.auth-card .field select:focus{
+  background:rgba(255,255,255,.18);
+  border-color:var(--mint);
+  box-shadow:0 0 0 4px rgba(74,127,212,.22);
+}
+.auth-card .field select option{background:#1e293b;color:#fff;}
+.auth-card .form-footer{color:rgba(255,255,255,.55);}
+.auth-card .link{color:var(--mint);}
+.auth-card .info-alert{background:rgba(58,127,189,.2);border-color:rgba(58,127,189,.4);color:#a8d4f5;}
+.auth-card .code-box{background:rgba(0,0,0,.35);}
+.auth-card .demo-box{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.7);}
 .demo-box{margin-top:1.5rem;background:var(--sand);border-radius:10px;padding:1rem 1.1rem;font-size:.78rem;color:var(--text2);line-height:1.8;border:1px solid var(--border);}
+/* Restore layout on mobile where sidebar is hidden */
+@media(max-width:900px){
+  .auth-wrap{margin-left:0;padding-left:1rem;}
+}
 
 /* FORMS */
 .field{margin-bottom:1.3rem;}
 .field label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin-bottom:.45rem;}
 .field input,.field select,.field textarea{width:100%;font-family:var(--font);font-size:.95rem;padding:.9rem 1.1rem;border:1.5px solid var(--border);border-radius:10px;background:var(--cream);color:var(--text);transition:border-color .15s,box-shadow .15s,background .15s;line-height:1.5;}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--mint);background:var(--paper);box-shadow:0 0 0 4px rgba(82,183,136,.14);}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--mint);background:var(--paper);box-shadow:0 0 0 4px rgba(74,127,212,.14);}
 .field textarea{resize:vertical;min-height:90px;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 .form-footer{text-align:center;margin-top:1.5rem;font-size:.88rem;color:var(--text3);}
@@ -75,8 +317,8 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;border-radius:10px;font-family:var(--font);font-size:.92rem;font-weight:700;cursor:pointer;border:none;transition:all .18s;text-decoration:none;letter-spacing:.01em;line-height:1;}
-.btn-primary{background:var(--green);color:#fff;box-shadow:0 3px 12px rgba(45,106,79,.3);}
-.btn-primary:hover{background:var(--forest);transform:translateY(-1px);box-shadow:0 5px 18px rgba(45,106,79,.4);}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 3px 12px rgba(43,76,140,.3);}
+.btn-primary:hover{background:var(--forest);transform:translateY(-1px);box-shadow:0 5px 18px rgba(43,76,140,.4);}
 .btn-primary:active{transform:translateY(0);}
 .btn-outline{background:transparent;color:var(--green);border:1.5px solid var(--green);}
 .btn-outline:hover{background:var(--mint-lt);}
@@ -111,7 +353,7 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
 /* SEARCH */
 .search-wrap{position:relative;max-width:400px;margin-bottom:1.75rem;}
 .search-wrap input{width:100%;font-family:var(--font);font-size:.92rem;padding:.8rem 1rem .8rem 2.75rem;border:1.5px solid var(--border);border-radius:10px;background:var(--paper);color:var(--text);transition:border-color .15s,box-shadow .15s;}
-.search-wrap input:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 4px rgba(82,183,136,.12);}
+.search-wrap input:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 4px rgba(74,127,212,.12);}
 .search-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;pointer-events:none;font-family:var(--font);}
 .search-wrap input{padding-left:4.5rem;}
 
@@ -138,6 +380,14 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
 .badge-active{background:var(--sky-lt);color:var(--sky);}
 .badge-open{background:var(--mint-lt);color:var(--green);}
 .badge-closed{background:var(--sand);color:var(--text3);}
+.badge-completed{background:var(--mint-lt);color:var(--green);}
+
+/* RECORDS TOOLBAR */
+.records-bar{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;margin-bottom:1.5rem;padding:1.25rem;background:var(--paper);border:1px solid var(--border);border-radius:var(--r);}
+.records-bar .field{margin-bottom:0;flex:1;min-width:140px;}
+.records-bar .field label{font-size:.68rem;}
+.records-bar .field input{padding:.65rem .85rem;font-size:.88rem;}
+.records-note{font-size:.82rem;color:var(--text3);margin-bottom:1rem;line-height:1.5;}
 
 /* PANEL */
 .panel{background:var(--paper);border:1px solid var(--border);border-radius:var(--r-lg);padding:2.25rem 2.5rem;max-width:700px;}
@@ -167,12 +417,455 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
   .field-row{grid-template-columns:1fr;}
   .auth-card{padding:2rem 1.5rem;}
   .panel{padding:1.5rem 1.25rem;}
+  .auth-wrap{margin-left:0;padding-left:1rem;}
 }
 @media(max-width:500px){
   .stats-row{grid-template-columns:repeat(2,1fr);gap:.75rem;}
   .tab{padding:.65rem .9rem;font-size:.8rem;}
   .content{padding:1.25rem 1rem;}
 }
+
+/* ═══════════════════════════════════════════════
+   3D INTERNSHIP SHOWCASE SECTION
+═══════════════════════════════════════════════ */
+.showcase-section {
+  padding: 6rem 2.5rem;
+  background: linear-gradient(160deg, #0a0f1e 0%, #0d1b2a 40%, #101827 70%, #0f172a 100%);
+  position: relative;
+  overflow: hidden;
+}
+.showcase-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%, rgba(217,119,6,.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 70%, rgba(2,132,199,.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.showcase-section::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217,119,6,.6), transparent);
+}
+
+/* Floating particles */
+.showcase-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.showcase-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(217,119,6,.6);
+  animation: floatParticle linear infinite;
+}
+@keyframes floatParticle {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-20px) scale(1); opacity: 0; }
+}
+
+.showcase-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.showcase-head {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.showcase-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: rgba(217,119,6,.12);
+  border: 1px solid rgba(217,119,6,.3);
+  color: var(--amber);
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  padding: .45rem 1.1rem;
+  border-radius: 999px;
+  margin-bottom: 1.25rem;
+}
+.showcase-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: .85rem;
+}
+.showcase-title em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--amber), #fbbf24, var(--amber));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+.showcase-sub {
+  color: rgba(255,255,255,.5);
+  font-size: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* 3D Grid */
+.showcase-3d-wrap {
+  width: 100%;
+}
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+
+/* Individual premium card */
+.s-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--green);
+  transition:
+    transform .3s cubic-bezier(.25,.8,.25,1),
+    box-shadow .3s ease,
+    border-color .3s ease;
+  will-change: transform;
+  border: 1px solid rgba(255,255,255,.06);
+  box-shadow: 0 15px 45px rgba(0,0,0,.3);
+}
+.s-card:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 25px 50px rgba(0,0,0,.55),
+    0 0 30px rgba(217,119,6,.2),
+    0 0 0 1px rgba(217,119,6,.3);
+  z-index: 10;
+}
+
+/* Card Image */
+.s-card-img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+  filter: brightness(.9) saturate(1.1);
+  transition: filter .4s ease, transform .5s ease;
+}
+.s-card:hover .s-card-img {
+  filter: brightness(1.05) saturate(1.2);
+  transform: scale(1.05);
+}
+
+/* Gradient overlay on image */
+.s-card-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 240px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.08) 0%,
+    rgba(0,0,0,.0) 40%,
+    rgba(0,0,0,.55) 100%
+  );
+  pointer-events: none;
+}
+
+/* Glowing top border line */
+.s-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+  z-index: 5;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.s-card:hover::before { opacity: 1; }
+
+/* Bottom badge on image */
+.s-card-badge {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.15);
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  padding: .3rem .75rem;
+  border-radius: 999px;
+  z-index: 4;
+}
+
+/* Card Body */
+.s-card-body {
+  background: linear-gradient(180deg, #111827 0%, #0d1b2a 100%);
+  padding: 1.5rem 1.6rem;
+  position: relative;
+}
+
+/* Company logo area */
+.s-card-company {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  margin-bottom: 1rem;
+}
+.s-card-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+}
+.s-card-logo.mtn   { background: linear-gradient(135deg, #ffcb00, #f59e0b); }
+.s-card-logo.ura   { background: linear-gradient(135deg, #1e3a8a, #2563eb); }
+.s-card-logo.stanbic { background: linear-gradient(135deg, #1a3450, #2563eb); }
+.s-card-name {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #fff;
+  line-height: 1.1;
+}
+.s-card-sector {
+  font-size: .72rem;
+  color: rgba(255,255,255,.4);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  font-weight: 600;
+}
+
+.s-card-title {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: .5rem;
+  line-height: 1.35;
+}
+.s-card-desc {
+  font-size: .83rem;
+  color: rgba(255,255,255,.52);
+  line-height: 1.65;
+  margin-bottom: 1.1rem;
+}
+
+/* Tags row */
+.s-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: 1.1rem;
+}
+.s-tag {
+  font-size: .68rem;
+  font-weight: 700;
+  padding: .28rem .7rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  border: 1px solid;
+}
+.s-tag-amber  { background: rgba(217,119,6,.15); color: #fbbf24; border-color: rgba(217,119,6,.3); }
+.s-tag-blue   { background: rgba(2,132,199,.15);  color: #38bdf8; border-color: rgba(2,132,199,.3); }
+.s-tag-green  { background: rgba(16,185,129,.15); color: #34d399; border-color: rgba(16,185,129,.3); }
+
+/* CTA Link */
+.s-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--amber);
+  text-decoration: none;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: gap .2s, opacity .2s;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font);
+}
+.s-card-cta:hover { gap: .7rem; opacity: .85; }
+.s-card-cta::after { content: '→'; }
+
+
+/* Stats row below cards */
+.showcase-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 3.5rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+.showcase-stat {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  transition: transform .25s, border-color .25s;
+}
+.showcase-stat:hover {
+  transform: translateY(-4px);
+  border-color: rgba(217,119,6,.3);
+}
+.showcase-stat-num {
+  font-family: var(--display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: .3rem;
+}
+.showcase-stat-num span {
+  background: linear-gradient(90deg, var(--amber), #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.showcase-stat-label {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.4);
+  font-weight: 600;
+}
+
+/* Partner ticker */
+.partner-ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  padding: .85rem 0;
+  margin-bottom: 3.5rem;
+  border-top: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  position: relative;
+}
+.partner-ticker-wrap::before,
+.partner-ticker-wrap::after {
+  display: none;
+}
+.partner-ticker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+.partner-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 999px;
+  padding: .45rem 1.1rem .45rem .7rem;
+  white-space: nowrap;
+  transition: background .2s, border-color .2s;
+  cursor: default;
+}
+.partner-chip:hover {
+  background: rgba(217,119,6,.12);
+  border-color: rgba(217,119,6,.3);
+}
+.partner-chip-icon {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: .9rem;
+  flex-shrink: 0;
+}
+.partner-chip span {
+  font-size: .78rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.65);
+  letter-spacing: .02em;
+}
+
+/* Showcase CTA */
+.showcase-cta {
+  text-align: center;
+  margin-top: 2.75rem;
+}
+.showcase-cta p {
+  font-size: .88rem;
+  color: rgba(255,255,255,.38);
+  margin-top: .85rem;
+}
+.btn-showcase {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: 1rem 2.25rem;
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: .95rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg, var(--amber) 0%, #f59e0b 100%);
+  color: #0f172a;
+  box-shadow: 0 8px 32px rgba(217,119,6,.4), 0 0 0 1px rgba(217,119,6,.2);
+  transition: transform .2s, box-shadow .2s;
+  letter-spacing: .01em;
+}
+.btn-showcase:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 44px rgba(217,119,6,.55), 0 0 0 1px rgba(217,119,6,.35);
+}
+.btn-showcase::after { content: '→'; font-size: 1rem; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .showcase-section { padding: 4rem 1.25rem; }
+  .showcase-grid    { grid-template-columns: 1fr; }
+  .showcase-stats   { grid-template-columns: 1fr; }
+}
+@media (max-width: 500px) {
+  .showcase-section { padding: 3rem 1rem; }
+  .showcase-title   { font-size: 1.8rem; }
+}
+
+/* FORGOT PASSWORD */
+.reset-steps{display:flex;gap:.5rem;margin-bottom:2rem;justify-content:center;}
+.step-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background .25s;}
+.step-dot.done{background:var(--mint);}
+.step-dot.active{background:var(--green);width:28px;border-radius:999px;}
+.step-panel{display:none;animation:slideUp .22s ease;}
+.step-panel.active{display:block;}
+.code-box{background:var(--forest);border-radius:var(--r);padding:1.5rem;text-align:center;margin:1.25rem 0;}
+.code-val{font-size:2.4rem;font-weight:800;letter-spacing:.25em;color:var(--mint);font-family:monospace;}
+.code-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-top:.5rem;}
+.code-warn{font-size:.78rem;color:rgba(255,255,255,.5);margin-top:.4rem;}
+.info-alert{background:var(--sky-lt);border:1px solid var(--sky);border-radius:var(--r);padding:1rem 1.1rem;font-size:.85rem;color:var(--sky);line-height:1.55;margin-bottom:1.25rem;}
+.success-circle{width:72px;height:72px;border-radius:50%;background:var(--mint-lt);border:3px solid var(--mint);display:grid;place-items:center;font-size:2rem;margin:0 auto 1.25rem;}
 </style>
 </head>
 <body>
@@ -187,7 +880,9 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
       </div>
     </div>
     <div class="user-pill" id="userPill">
-      <div class="user-avatar" id="userAvatar">?</div>
+      <div class="user-avatar" id="userAvatar"
+           onclick="document.getElementById('avatarInput').click()"
+           title="Click to change profile picture">?</div>
       <div>
         <div class="pill-name" id="pillName">—</div>
         <div class="pill-role" id="pillRole">—</div>
@@ -196,13 +891,17 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
   </div>
   <nav class="nav-section" id="navLinks">
     <div class="nav-label">Navigation</div>
-    <button class="nav-link active" data-section="login" onclick="go('login')"> Sign In</button>
+    <button class="nav-link active" data-section="home" onclick="go('home')"> Home</button>
+    <button class="nav-link" data-section="login" onclick="go('login')"> Sign In</button>
     <button class="nav-link" data-section="register" onclick="go('register')"> Register</button>
   </nav>
   <div class="sidebar-footer">
     <button class="logout-btn" id="logoutBtn" onclick="logout()">Sign Out</button>
   </div>
 </aside>
+
+<!-- Hidden file input for profile picture upload -->
+<input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadProfilePic(this)">
 
 <div class="main-wrap">
   <header class="topbar">
@@ -213,8 +912,307 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
 
   <main class="content">
 
+    <!-- HOME -->
+    <section id="home" class="section active">
+      <div class="home-page">
+        <nav class="home-nav" id="homeNav">
+          <a href="#" class="home-nav-brand" onclick="go('home');return false;">
+            <span class="home-nav-icon">🎓</span>
+            <span class="home-nav-name">InternUG</span>
+          </a>
+          <div class="home-nav-links">
+            <a href="#features" class="nav-hide-mobile" onclick="scrollHome('features');return false;">Features</a>
+            <a href="#internship-showcase" class="nav-hide-mobile" onclick="scrollHome('internship-showcase');return false;">Top Partners</a>
+            <a href="#how-it-works" class="nav-hide-mobile" onclick="scrollHome('how-it-works');return false;">How it works</a>
+            <button type="button" onclick="go('login')">Sign In</button>
+            <button type="button" class="home-nav-cta" onclick="go('register')">Get Started</button>
+          </div>
+        </nav>
+
+        <header class="home-hero">
+          <div class="home-hero-inner">
+            <div>
+              <div class="home-hero-badge">🇺🇬 Uganda's internship network</div>
+              <h1>Find your path from <em>campus</em> to career</h1>
+              <p class="home-hero-lead">InternUG connects students, employers, and universities across Uganda — browse placements, apply in one click, and track your internship journey with digital logbooks.</p>
+              <div class="home-hero-actions">
+                <button type="button" class="btn btn-primary" onclick="go('register')">Create free account</button>
+                <button type="button" class="btn btn-hero-outline" onclick="go('login')">Sign in</button>
+              </div>
+              <div class="home-hero-stats">
+                <div class="home-hero-stat"><strong>50+</strong><span>Partner institutions</span></div>
+                <div class="home-hero-stat"><strong>1-click</strong><span>Applications</span></div>
+                <div class="home-hero-stat"><strong>24/7</strong><span>Digital logbooks</span></div>
+              </div>
+            </div>
+            <div class="home-hero-visual">
+              <div class="home-hero-card">
+                <h3>Everything in one portal</h3>
+                <div class="home-mini-list">
+                  <div class="home-mini-item">
+                    <span class="home-mini-icon">🔍</span>
+                    <div><strong>Browse internships</strong><span>Filter by company, location, and stipend across Uganda.</span></div>
+                  </div>
+                  <div class="home-mini-item">
+                    <span class="home-mini-icon">📋</span>
+                    <div><strong>Track applications</strong><span>See pending, approved, and placed status in real time.</span></div>
+                  </div>
+                  <div class="home-mini-item">
+                    <span class="home-mini-icon">✅</span>
+                    <div><strong>Supervisor approval</strong><span>Daily logbook entries reviewed by your host company.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="home-section-alt" id="features">
+          <div class="home-section home-section-inner">
+            <div class="home-section-head">
+              <div class="page-eyebrow">Why InternUG</div>
+              <h2 class="page-title">Built for Uganda's internship ecosystem</h2>
+              <p class="page-sub">Streamlined tools for every stakeholder in the placement process</p>
+            </div>
+            <div class="home-features">
+              <article class="home-feature">
+                <div class="home-feature-icon">🎯</div>
+                <h3>Smart matching</h3>
+                <p>Students discover openings from verified employers — filtered by institution, skills, and location.</p>
+              </article>
+              <article class="home-feature">
+                <div class="home-feature-icon">⚡</div>
+                <h3>Fast applications</h3>
+                <p>Apply with your profile in seconds. Companies review, approve, and create placements without paperwork.</p>
+              </article>
+              <article class="home-feature">
+                <div class="home-feature-icon">📓</div>
+                <h3>Digital logbooks</h3>
+                <p>Record daily hours and tasks. Supervisors approve entries to confirm your internship progress.</p>
+              </article>
+              <article class="home-feature">
+                <div class="home-feature-icon">🏢</div>
+                <h3>Employer dashboard</h3>
+                <p>Post internships, manage applicants, and close listings when positions are filled.</p>
+              </article>
+              <article class="home-feature">
+                <div class="home-feature-icon">🛡️</div>
+                <h3>Secure & private</h3>
+                <p>Your data is protected with authenticated access — only you and authorized parties see your records.</p>
+              </article>
+              <article class="home-feature">
+                <div class="home-feature-icon">📊</div>
+                <h3>Admin oversight</h3>
+                <p>University administrators monitor users, placements, and system-wide statistics from one panel.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D INTERNSHIP SHOWCASE -->
+        <div class="showcase-section" id="internship-showcase">
+          <div class="showcase-particles" id="showcaseParticles"></div>
+
+          <!-- Scrolling partner ticker -->
+          <div class="partner-ticker-wrap">
+            <div class="partner-ticker" id="partnerTicker">
+              <!-- set 1 -->
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#ffcb00,#f59e0b)">📶</div><span>MTN Uganda</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)">📊</div><span>Uganda Revenue Authority</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#1a3450,#2563eb)">💰</div><span>Stanbic Bank</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#065f46,#059669)">🏥</div><span>Mulago Hospital</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">💻</div><span>NITA-Uganda</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#b45309,#d97706)">⚡</div><span>UMEME Limited</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#0e7490,#06b6d4)">💧</div><span>NWSC Uganda</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6)">🏦</div><span>Bank of Uganda</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#dc2626,#ef4444)">📡</div><span>Airtel Uganda</span></div>
+              <div class="partner-chip"><div class="partner-chip-icon" style="background:linear-gradient(135deg,#15803d,#22c55e)">🌿</div><span>NEMA Uganda</span></div>
+
+            </div>
+          </div>
+
+          <div class="showcase-inner">
+            <div class="showcase-head">
+              <div class="showcase-eyebrow">✦ Real Placements, Real Impact</div>
+              <h2 class="showcase-title">Intern at <em>Uganda's top</em> organisations</h2>
+              <p class="showcase-sub">Students across Uganda are building careers at the nation's most prestigious institutions — join them.</p>
+            </div>
+
+            <div class="showcase-3d-wrap">
+              <div class="showcase-grid" id="showcaseGrid">
+
+                <!-- MTN Uganda -->
+                <div class="s-card" id="sc1">
+                  <img class="s-card-img" src="mtn_internship.png" alt="MTN Uganda intern at work" loading="lazy">
+                  <div class="s-card-overlay"></div>
+                  <div class="s-card-badge">📡 Telecom</div>
+                  <div class="s-card-body">
+                    <div class="s-card-company">
+                      <div class="s-card-logo mtn">📶</div>
+                      <div>
+                        <div class="s-card-name">MTN Uganda</div>
+                        <div class="s-card-sector">Telecommunications</div>
+                      </div>
+                    </div>
+                    <div class="s-card-title">Software & Network Engineering Internship</div>
+                    <div class="s-card-desc">Work alongside engineers building Uganda's largest mobile network, deploying 5G infrastructure and developing internal apps.</div>
+                    <div class="s-card-tags">
+                      <span class="s-tag s-tag-amber">Kampala</span>
+                      <span class="s-tag s-tag-blue">3 months</span>
+                      <span class="s-tag s-tag-green">Paid</span>
+                    </div>
+                    <button class="s-card-cta" onclick="go('register')">Apply now</button>
+                  </div>
+                </div>
+
+                <!-- URA -->
+                <div class="s-card" id="sc2">
+                  <img class="s-card-img" src="ura_internship.png" alt="Uganda Revenue Authority intern" loading="lazy">
+                  <div class="s-card-overlay"></div>
+                  <div class="s-card-badge">🏛️ Government</div>
+                  <div class="s-card-body">
+                    <div class="s-card-company">
+                      <div class="s-card-logo ura">📊</div>
+                      <div>
+                        <div class="s-card-name">Uganda Revenue Authority</div>
+                        <div class="s-card-sector">Public Finance & Tax</div>
+                      </div>
+                    </div>
+                    <div class="s-card-title">Data Analytics & Tax Systems Internship</div>
+                    <div class="s-card-desc">Contribute to Uganda's national revenue systems, analyse tax datasets, and work with policy teams to modernise public finance.</div>
+                    <div class="s-card-tags">
+                      <span class="s-tag s-tag-blue">Kampala</span>
+                      <span class="s-tag s-tag-amber">6 months</span>
+                      <span class="s-tag s-tag-green">Stipend</span>
+                    </div>
+                    <button class="s-card-cta" onclick="go('register')">Apply now</button>
+                  </div>
+                </div>
+
+                <!-- Stanbic Bank -->
+                <div class="s-card" id="sc3">
+                  <img class="s-card-img" src="stanbic_internship.png" alt="Stanbic Bank intern" loading="lazy">
+                  <div class="s-card-overlay"></div>
+                  <div class="s-card-badge">🏦 Banking</div>
+                  <div class="s-card-body">
+                    <div class="s-card-company">
+                      <div class="s-card-logo stanbic">💰</div>
+                      <div>
+                        <div class="s-card-name">Stanbic Bank Uganda</div>
+                        <div class="s-card-sector">Financial Services</div>
+                      </div>
+                    </div>
+                    <div class="s-card-title">Corporate Finance & Banking Internship</div>
+                    <div class="s-card-desc">Gain hands-on experience in corporate banking, financial modelling, and client advisory at Uganda's leading commercial bank.</div>
+                    <div class="s-card-tags">
+                      <span class="s-tag s-tag-blue">Kampala</span>
+                      <span class="s-tag s-tag-amber">3 months</span>
+                      <span class="s-tag s-tag-green">Paid</span>
+                    </div>
+                    <button class="s-card-cta" onclick="go('register')">Apply now</button>
+                  </div>
+                </div>
+
+              </div><!-- /showcase-grid -->
+            </div><!-- /showcase-3d-wrap -->
+
+
+            <!-- Stats bar -->
+            <div class="showcase-stats" id="showcaseStats">
+              <div class="showcase-stat">
+                <div class="showcase-stat-num"><span class="count-up" data-target="120" data-suffix="+">0+</span></div>
+                <div class="showcase-stat-label">Partner companies</div>
+              </div>
+              <div class="showcase-stat">
+                <div class="showcase-stat-num"><span class="count-up" data-target="4500" data-suffix="+" data-format="comma">0+</span></div>
+                <div class="showcase-stat-label">Students placed</div>
+              </div>
+              <div class="showcase-stat">
+                <div class="showcase-stat-num"><span class="count-up" data-target="92" data-suffix="%">0%</span></div>
+                <div class="showcase-stat-label">Employment rate post-internship</div>
+              </div>
+            </div>
+
+            <!-- CTA button -->
+            <div class="showcase-cta">
+              <button class="btn-showcase" onclick="go('register')">Browse all internship opportunities</button>
+              <p>No account needed to browse &mdash; sign up free in 30 seconds</p>
+            </div>
+
+          </div><!-- /showcase-inner -->
+        </div><!-- /showcase-section -->
+
+        <div class="home-section" id="how-it-works">
+          <div class="home-section-head">
+            <div class="page-eyebrow">Simple process</div>
+            <h2 class="page-title">How it works</h2>
+            <p class="page-sub">From sign-up to placement in four straightforward steps</p>
+          </div>
+          <div class="home-steps">
+            <div class="home-step">
+              <div class="home-step-num">1</div>
+              <h4>Create account</h4>
+              <p>Register as a student, company, or administrator with your details.</p>
+            </div>
+            <div class="home-step">
+              <div class="home-step-num">2</div>
+              <h4>Discover or post</h4>
+              <p>Students browse listings; companies publish internship opportunities.</p>
+            </div>
+            <div class="home-step">
+              <div class="home-step-num">3</div>
+              <h4>Apply & approve</h4>
+              <p>Submit applications and get reviewed by employers in the portal.</p>
+            </div>
+            <div class="home-step">
+              <div class="home-step-num">4</div>
+              <h4>Track & log</h4>
+              <p>Once placed, submit daily logbook entries for supervisor approval.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-section home-section-alt">
+          <div class="home-section-inner">
+            <div class="home-section-head">
+              <div class="page-eyebrow">Who it's for</div>
+              <h2 class="page-title">One platform, three roles</h2>
+            </div>
+            <div class="home-audience">
+              <article class="home-audience-card student">
+                <span class="tag">Students</span>
+                <h3>Launch your career</h3>
+                <p>Browse internships at Makerere, Kyambogo, MUBS, and more. Apply, track status, and build your professional logbook.</p>
+                <button type="button" class="btn btn-sm" onclick="go('register')">Join as student</button>
+              </article>
+              <article class="home-audience-card company">
+                <span class="tag">Employers</span>
+                <h3>Hire emerging talent</h3>
+                <p>Post openings, review applications, approve candidates, and verify intern hours through integrated logbook review.</p>
+                <button type="button" class="btn btn-sm" onclick="go('register')">Join as company</button>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-cta-band">
+          <h2>Ready to start your internship journey?</h2>
+          <p>Join thousands of students and employers already using InternUG to connect talent with opportunity.</p>
+          <div class="home-hero-actions">
+            <button type="button" class="btn btn-primary" onclick="go('register')">Create your account</button>
+            <button type="button" class="btn btn-hero-outline" onclick="go('login')">I already have an account</button>
+          </div>
+        </div>
+
+        <footer class="home-footer">
+          <strong>InternUG</strong>
+          Uganda Internship Placement Portal · Connecting campus to career
+        </footer>
+      </div>
+    </section>
+
     <!-- LOGIN -->
-    <section id="login" class="section active">
+    <section id="login" class="section">
       <div class="auth-wrap">
         <div class="auth-card">
           <div class="auth-eyebrow">InternUG Portal</div>
@@ -227,12 +1225,12 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
               <select id="loginRole">
                 <option value="student">Student</option>
                 <option value="company">Company / Employer</option>
-                <option value="admin">Administrator</option>
               </select>
             </div>
             <button type="submit" class="btn btn-primary btn-full" style="margin-top:.5rem">Sign In</button>
           </form>
           <div class="form-footer">No account? <span class="link" onclick="go('register')">Create one here</span></div>
+          <div class="form-footer" style="margin-top:.5rem">Forgot your password? <span class="link" onclick="go('forgotPassword')">Reset it here</span></div>
           
         </div>
       </div>
@@ -253,7 +1251,6 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
               <select id="regRole" onchange="toggleRegFields()">
                 <option value="student">Student</option>
                 <option value="company">Company / Employer</option>
-                <option value="admin">Administrator</option>
               </select>
             </div>
             <div id="studentFields" class="field">
@@ -276,6 +1273,66 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
       </div>
     </section>
 
+    <!-- FORGOT PASSWORD -->
+    <section id="forgotPassword" class="section">
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-eyebrow">Account Recovery</div>
+          <h2 class="auth-title">Reset Password</h2>
+          <p class="auth-sub">Recover access to your InternUG account</p>
+
+          <!-- Step indicators -->
+          <div class="reset-steps">
+            <div class="step-dot active" id="sd1"></div>
+            <div class="step-dot" id="sd2"></div>
+            <div class="step-dot" id="sd3"></div>
+          </div>
+
+          <!-- Step 1: Enter email -->
+          <div class="step-panel active" id="reset-step1">
+            <div class="info-alert">Enter the email address associated with your account and we will generate a reset code for you.</div>
+            <form onsubmit="requestReset(event)">
+              <div class="field"><label>Registered Email Address</label><input type="email" id="resetEmail" placeholder="you@example.com" required></div>
+              <button type="submit" id="reqResetBtn" class="btn btn-primary btn-full">Send Reset Code</button>
+            </form>
+          </div>
+
+          <!-- Step 2: Show the code & enter it -->
+          <div class="step-panel" id="reset-step2">
+            <div class="info-alert">Your reset code is shown below. Copy it and enter it in the field &mdash; it is valid for <strong>15 minutes</strong>.</div>
+            <div class="code-box">
+              <div class="code-val" id="resetCodeDisplay">&mdash; &mdash; &mdash; &mdash; &mdash; &mdash;</div>
+              <div class="code-label">Your Reset Code</div>
+              <div class="code-warn">Do not share this code with anyone</div>
+            </div>
+            <form onsubmit="verifyResetCode(event)">
+              <div class="field"><label>Enter the 6-digit code above</label><input type="text" id="resetCodeInput" placeholder="e.g. 482917" maxlength="6" pattern="[0-9]{6}" required></div>
+              <div class="field"><label>New Password</label><input type="password" id="resetNewPass" placeholder="At least 6 characters" minlength="6" required></div>
+              <div class="field"><label>Confirm New Password</label><input type="password" id="resetConfirmPass" placeholder="Repeat new password" required></div>
+              <button type="submit" id="doResetBtn" class="btn btn-primary btn-full">Reset Password</button>
+            </form>
+            <div class="form-footer" style="margin-top:1rem">
+              Didn't get a code? <span class="link" onclick="resetGoStep(1)">Try again</span>
+            </div>
+          </div>
+
+          <!-- Step 3: Success -->
+          <div class="step-panel" id="reset-step3">
+            <div style="text-align:center;padding:1rem 0">
+              <div class="success-circle">&#10003;</div>
+              <p style="font-weight:700;font-size:1.1rem;color:var(--forest);margin-bottom:.5rem">Password Updated!</p>
+              <p style="font-size:.9rem;color:var(--text3);margin-bottom:1.75rem">Your password has been reset successfully. Sign in with your new credentials.</p>
+              <button class="btn btn-primary" onclick="go('login')">Go to Sign In</button>
+            </div>
+          </div>
+
+          <div class="form-footer" style="margin-top:1.25rem">
+            Remembered it? <span class="link" onclick="go('login')">Back to Sign In</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- STUDENT DASHBOARD -->
     <section id="studentDashboard" class="section">
       <div class="page-header">
@@ -288,6 +1345,7 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
         <button class="tab active" onclick="switchTab(this,'st-browse')">Browse Internships</button>
         <button class="tab" onclick="switchTab(this,'st-apps')">My Applications</button>
         <button class="tab" onclick="switchTab(this,'st-logbook')">Logbook</button>
+        <button class="tab" onclick="switchTab(this,'st-placement')">Placement</button>
       </div>
       <div id="st-browse" class="tab-content active">
         <div class="search-wrap"><span class="search-icon">Search</span><input type="text" placeholder="Search by title, company or location…" oninput="filterInternships(this.value)"></div>
@@ -295,6 +1353,7 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
       </div>
       <div id="st-apps" class="tab-content"><div class="grid" id="myAppsList"></div></div>
       <div id="st-logbook" class="tab-content">
+        <p class="records-note">All entries are saved permanently for future reference and clarification. Use filters or export your full record anytime.</p>
         <div class="panel" style="margin-bottom:2rem">
           <div class="panel-title">Submit Daily Entry</div>
           <form onsubmit="submitLogbook(event)">
@@ -306,7 +1365,16 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
             <button type="submit" id="logSubmitBtn" class="btn btn-primary">Submit Entry</button>
           </form>
         </div>
+        <div class="records-bar">
+          <div class="field"><label>From</label><input type="date" id="logFilterFrom"></div>
+          <div class="field"><label>To</label><input type="date" id="logFilterTo"></div>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="rLogbooks()">Filter</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="exportLogbooks()">Export CSV</button>
+        </div>
         <div class="grid" id="logbookList"></div>
+      </div>
+      <div id="st-placement" class="tab-content">
+        <div class="grid" id="studentPlacements"></div>
       </div>
     </section>
 
@@ -322,6 +1390,7 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
         <button class="tab active" onclick="switchTab(this,'co-post')">Post Internship</button>
         <button class="tab" onclick="switchTab(this,'co-listings')">My Listings</button>
         <button class="tab" onclick="switchTab(this,'co-apps')">Applications</button>
+        <button class="tab" onclick="switchTab(this,'co-placements')">Placements</button>
         <button class="tab" onclick="switchTab(this,'co-logbooks')">Logbook Review</button>
       </div>
       <div id="co-post" class="tab-content active">
@@ -342,9 +1411,17 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
       <div id="co-listings" class="tab-content"><div class="grid" id="coListings"></div></div>
       <div id="co-apps" class="tab-content"><div class="grid" id="coApps"></div></div>
 
+      <div id="co-placements" class="tab-content">
+        <p class="records-note">Mark placements as completed when the internship ends. Students can then download their official letter of completion.</p>
+        <div class="grid" id="coPlacements"></div>
+      </div>
+
       <div id="co-logbooks" class="tab-content">
-        <div style="background:var(--sky-lt);border:1px solid var(--sky);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.88rem;color:var(--sky);">
-          <strong>Logbook Review</strong> — These are daily work entries submitted by your placed interns. Review and approve each entry to confirm their hours.
+        <p class="records-note">Review and approve intern logbook entries. Approved records are kept on file for future clarification.</p>
+        <div class="records-bar">
+          <div class="field"><label>From</label><input type="date" id="coLogFrom"></div>
+          <div class="field"><label>To</label><input type="date" id="coLogTo"></div>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="rCoLogbooks()">Filter</button>
         </div>
         <div class="grid" id="coLogbooks"></div>
       </div>
@@ -357,18 +1434,45 @@ body{font-family:var(--font);background:var(--cream);color:var(--text);display:f
         <h2 class="page-title">Admin Panel</h2>
         <p class="page-sub">Manage all users, internships and placements</p>
       </div>
-      <div class="stats-row" id="adminStats"></div>
       <div class="tab-bar">
-        <button class="tab active" onclick="switchTab(this,'ad-users')">Users</button>
+        <button class="tab active" onclick="switchTab(this,'ad-dashboard')">Dashboard</button>
+        <button class="tab" onclick="switchTab(this,'ad-users')">Users</button>
         <button class="tab" onclick="switchTab(this,'ad-internships')">Internships</button>
         <button class="tab" onclick="switchTab(this,'ad-placements')">Placements</button>
+        <button class="tab" onclick="switchTab(this,'ad-logbooks')">Logbook Records</button>
       </div>
-      <div id="ad-users" class="tab-content active">
+      
+      <div id="ad-dashboard" class="tab-content active">
+        <div class="stats-row" id="adminStats"></div>
+        <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <div class="dashboard-panel">
+            <h3 style="margin-bottom: 1rem; color: var(--text);">Recent Users</h3>
+            <div class="grid" id="adminRecentUsers"></div>
+            <button class="btn btn-ghost btn-sm" style="margin-top: 1rem;" onclick="document.querySelector('#admin .tab-bar .tab:nth-child(2)').click()">View All Users</button>
+          </div>
+          <div class="dashboard-panel">
+            <h3 style="margin-bottom: 1rem; color: var(--text);">Recent Placements</h3>
+            <div class="grid" id="adminRecentPlacements"></div>
+            <button class="btn btn-ghost btn-sm" style="margin-top: 1rem;" onclick="document.querySelector('#admin .tab-bar .tab:nth-child(4)').click()">View All Placements</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="ad-users" class="tab-content">
         <div class="search-wrap"><span class="search-icon">Search</span><input type="text" placeholder="Filter by name, email or role…" oninput="filterUsers(this.value)"></div>
         <div class="grid" id="usersList"></div>
       </div>
       <div id="ad-internships" class="tab-content"><div class="grid" id="adminInternships"></div></div>
       <div id="ad-placements" class="tab-content"><div class="grid" id="adminPlacements"></div></div>
+      <div id="ad-logbooks" class="tab-content">
+        <p class="records-note">Full archive of all student logbook entries across the platform.</p>
+        <div class="records-bar">
+          <div class="field"><label>From</label><input type="date" id="adLogFrom"></div>
+          <div class="field"><label>To</label><input type="date" id="adLogTo"></div>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="rAdminLogbooks()">Filter</button>
+        </div>
+        <div class="grid" id="adminLogbooks"></div>
+      </div>
     </section>
 
   </main>
@@ -418,13 +1522,34 @@ function go(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.section === id));
-  const titles = { login:'Welcome to InternUG', register:'Create Account', studentDashboard:'Student Dashboard', companyDashboard:'Company Dashboard', admin:'Admin Panel' };
+  const authPages = ['login','register','forgotPassword'];
+  document.body.classList.toggle('auth-mode', authPages.includes(id));
+  document.body.classList.toggle('home-mode', id === 'home');
+  const titles = {
+    home:'InternUG — Uganda Internship Portal',
+    login:'Welcome to InternUG',
+    register:'Create Account',
+    forgotPassword:'Reset Password',
+    studentDashboard:'Student Dashboard',
+    companyDashboard:'Company Dashboard',
+    admin:'Admin Panel'
+  };
   document.getElementById('topbarTitle').textContent = titles[id] || 'InternUG';
   document.getElementById('sidebar').classList.remove('open');
+  if (id !== 'home') window.scrollTo(0, 0);
   if (['studentDashboard','companyDashboard','admin'].includes(id)) {
     if (!currentUser) { toast('Please sign in first', 'error'); go('login'); return; }
     loadDash(id);
   }
+  if (id === 'forgotPassword') resetGoStep(1);
+}
+
+function scrollHome(anchorId) {
+  if (!document.getElementById('home').classList.contains('active')) go('home');
+  requestAnimationFrame(() => {
+    const el = document.getElementById(anchorId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 function switchTab(btn, id) {
@@ -483,7 +1608,7 @@ function logout() {
   currentUser = null; token = null;
   localStorage.removeItem('currentUser');
   localStorage.removeItem('token');
-  setSidebar(null); toast('Signed out successfully', 'info'); go('login');
+  setSidebar(null); toast('Signed out successfully', 'info'); go('home');
 }
 
 function toggleRegFields() {
@@ -492,7 +1617,100 @@ function toggleRegFields() {
   document.getElementById('companyFields').style.display = role === 'company' ? 'block' : 'none';
 }
 
-/* ── SIDEBAR ────────────────────────────────── */
+/* ── FORGOT PASSWORD ────────────────────────── */
+let _resetEmail = '';
+
+function resetGoStep(step) {
+  [1,2,3].forEach(n => {
+    document.getElementById(`reset-step${n}`).classList.toggle('active', n === step);
+    const dot = document.getElementById(`sd${n}`);
+    dot.classList.remove('active','done');
+    if (n < step)  dot.classList.add('done');
+    if (n === step) dot.classList.add('active');
+  });
+  if (step === 1) {
+    const re  = document.getElementById('resetEmail');
+    const rc  = document.getElementById('resetCodeInput');
+    const rp  = document.getElementById('resetNewPass');
+    const rcp = document.getElementById('resetConfirmPass');
+    if (re)  re.value  = '';
+    if (rc)  rc.value  = '';
+    if (rp)  rp.value  = '';
+    if (rcp) rcp.value = '';
+    document.getElementById('resetCodeDisplay').textContent = '— — — — — —';
+    _resetEmail = '';
+  }
+}
+
+async function requestReset(e) {
+  e.preventDefault();
+  const email = v('resetEmail').trim();
+  if (!email) return;
+  try {
+    const btn = document.getElementById('reqResetBtn');
+    btn.disabled = true; btn.textContent = 'Please wait…';
+    const data = await api('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email })
+    });
+    _resetEmail = email;
+    if (data.reset_code) {
+      document.getElementById('resetCodeDisplay').textContent = data.reset_code;
+    } else {
+      document.getElementById('resetCodeDisplay').textContent = '(not found)';
+    }
+    toast('Reset code generated!', 'success');
+    resetGoStep(2);
+  } catch(_) {}
+  finally {
+    const btn = document.getElementById('reqResetBtn');
+    if (btn) { btn.disabled = false; btn.textContent = 'Send Reset Code'; }
+  }
+}
+
+async function verifyResetCode(e) {
+  e.preventDefault();
+  const code     = v('resetCodeInput').trim();
+  const newPass  = v('resetNewPass');
+  const confPass = v('resetConfirmPass');
+  if (newPass !== confPass) { toast('Passwords do not match', 'error'); return; }
+  if (newPass.length < 6)  { toast('Password must be at least 6 characters', 'error'); return; }
+  try {
+    const btn = document.getElementById('doResetBtn');
+    btn.disabled = true; btn.textContent = 'Resetting…';
+    await api('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ email: _resetEmail, reset_code: code, new_password: newPass })
+    });
+    toast('Password reset successfully!', 'success');
+    resetGoStep(3);
+  } catch(_) {}
+  finally {
+    const btn = document.getElementById('doResetBtn');
+    if (btn) { btn.disabled = false; btn.textContent = 'Reset Password'; }
+  }
+}
+
+/* ── PROFILE PICTURE ────────────────────────── */
+function uploadProfilePic(input) {
+  if (!input.files || !input.files[0] || !currentUser) return;
+  const file = input.files[0];
+  if (file.size > 5 * 1024 * 1024) { toast('Image must be under 5 MB', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    localStorage.setItem('profilePic_' + currentUser.id, dataUrl);
+    const avatarEl = document.getElementById('userAvatar');
+    avatarEl.style.backgroundImage    = `url(${dataUrl})`;
+    avatarEl.style.backgroundSize     = 'cover';
+    avatarEl.style.backgroundPosition = 'center';
+    avatarEl.textContent = '';
+    toast('Profile picture updated!', 'success');
+  };
+  reader.readAsDataURL(file);
+  input.value = ''; // reset so same file can be re-selected
+}
+
 function setSidebar(user) {
   const pill = document.getElementById('userPill');
   const lb   = document.getElementById('logoutBtn');
@@ -500,11 +1718,23 @@ function setSidebar(user) {
   if (!user) {
     pill.style.display = 'none'; lb.style.display = 'none'; chip.style.display = 'none';
     document.getElementById('navLinks').innerHTML = `<div class="nav-label">Navigation</div>
+      <button class="nav-link" data-section="home" onclick="go('home')"> Home</button>
       <button class="nav-link" data-section="login" onclick="go('login')"> Sign In</button>
       <button class="nav-link" data-section="register" onclick="go('register')"> Register</button>`;
     return;
   }
-  document.getElementById('userAvatar').textContent = user.name[0].toUpperCase();
+  // Profile picture: load from localStorage or fall back to initial
+  const avatarEl = document.getElementById('userAvatar');
+  const savedPic = localStorage.getItem('profilePic_' + user.id);
+  if (savedPic) {
+    avatarEl.style.backgroundImage = `url(${savedPic})`;
+    avatarEl.style.backgroundSize  = 'cover';
+    avatarEl.style.backgroundPosition = 'center';
+    avatarEl.textContent = '';
+  } else {
+    avatarEl.style.backgroundImage = '';
+    avatarEl.textContent = user.name[0].toUpperCase();
+  }
   document.getElementById('pillName').textContent   = user.name;
   document.getElementById('pillRole').textContent   = user.role;
   pill.style.display = 'flex'; lb.style.display = 'flex';
@@ -521,14 +1751,14 @@ function loadDash(id) {
   if (id === 'studentDashboard') {
     document.getElementById('studentName').textContent = currentUser.name.split(' ')[0];
     document.getElementById('studentInst').textContent = currentUser.institution || '';
-    rStudentStats(); rInternships(); rMyApps(); rLogbooks();
+    rStudentStats(); rInternships(); rMyApps(); rLogbooks(); rStudentPlacements();
     const ld = document.getElementById('logDate');
     if (ld) ld.value = new Date().toISOString().split('T')[0];
   } else if (id === 'companyDashboard') {
     document.getElementById('companyDisp').textContent = currentUser.company_name || currentUser.name;
-    rCompanyStats(); rCoListings(); rCoApps(); rCoLogbooks();
+    rCompanyStats(); rCoListings(); rCoApps(); rCoPlacements(); rCoLogbooks();
   } else if (id === 'admin') {
-    rAdminStats(); rUsers(); rAdminInternships(); rAdminPlacements();
+    rAdminStats(); rUsers(); rAdminInternships(); rAdminPlacements(); rAdminLogbooks();
   }
 }
 
@@ -661,23 +1891,99 @@ async function submitLogbook(e) {
   finally { setBtn('logSubmitBtn', false); }
 }
 
+function logbookQuery(prefix) {
+  const from = document.getElementById(prefix + 'From')?.value;
+  const to   = document.getElementById(prefix + 'To')?.value;
+  const p = new URLSearchParams();
+  if (from) p.set('from', from);
+  if (to) p.set('to', to);
+  const q = p.toString();
+  return q ? '?' + q : '';
+}
+
+async function exportLogbooks() {
+  try {
+    const q = logbookQuery('logFilter');
+    const res = await fetch(API + '/logbooks/export' + q, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Export failed');
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `internug-logbook-${currentUser.id}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Logbook exported successfully', 'success');
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+}
+
 async function rLogbooks() {
   const el = document.getElementById('logbookList');
   el.innerHTML = loading();
   try {
-    const logs = await api('/logbooks/mine');
+    const logs = await api('/logbooks/mine' + logbookQuery('logFilter'));
     if (!logs.length) { el.innerHTML = empt('No entries yet — start recording your daily work!'); return; }
     el.innerHTML = logs.map(l => `<div class="card">
+      <div class="card-company">${l.company_name || 'Internship'} · ${l.internship_title || '—'}</div>
       <div class="card-title">${fmt(l.date)}</div>
       <div class="card-tags">
         <span class="tag tag-blue">${l.hours_worked} hours</span>
         ${l.approved
           ? `<span class="tag tag-green">Approved</span>`
           : `<span class="tag tag-amber">Pending Review</span>`}
+        <span class="tag tag-gray">Record #${l.id}</span>
       </div>
       <div class="card-desc">${l.description}</div>
+      <div class="card-meta">Submitted: ${fmt(l.submitted_at)}</div>
     </div>`).join('');
   } catch(_) { el.innerHTML = empt('Could not load logbook entries.'); }
+}
+
+async function rStudentPlacements() {
+  const el = document.getElementById('studentPlacements');
+  if (!el) return;
+  el.innerHTML = loading();
+  try {
+    const list = await api('/placements/mine');
+    if (!list.length) { el.innerHTML = empt('No placement yet. Once your application is approved and the company creates a placement, it will appear here.'); return; }
+    el.innerHTML = list.map(p => `<div class="card">
+      <div class="card-company">${p.company_name}</div>
+      <div class="card-title">${p.title}</div>
+      <div class="card-meta">${p.location || ''}</div>
+      <div class="card-meta">Started: ${fmt(p.start_date)}${p.end_date ? ' · Ended: ' + fmt(p.end_date) : ''}</div>
+      <div class="card-tags"><span class="badge badge-${p.status === 'completed' ? 'completed' : 'active'}">${cap(p.status)}</span></div>
+      <div class="card-actions">
+        ${p.status === 'completed'
+          ? `<button class="btn btn-primary btn-sm" onclick="openCompletionLetter(${p.id})">Download Letter of Completion</button>`
+          : `<span class="tag tag-amber">Awaiting completion from employer</span>`}
+      </div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load placements.'); }
+}
+
+function openCompletionLetter(placementId) {
+  const url = `${API}/placements/${placementId}/completion-letter`;
+  fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+    .then(async res => {
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Could not generate letter');
+      }
+      return res.text();
+    })
+    .then(html => {
+      const w = window.open('', '_blank');
+      w.document.write(html);
+      w.document.close();
+    })
+    .catch(err => toast(err.message, 'error'));
 }
 
 /* ── COMPANY: POST INTERNSHIP ───────────────── */
@@ -767,22 +2073,55 @@ async function rCoApps() {
 
 async function approveApp(id) {
   try {
-    await api(`/applications/${id}/approve`, { method: 'PATCH' });
-    toast('Application approved!', 'success'); rCoApps(); rCompanyStats();
+    const data = await api(`/applications/${id}/approve`, { method: 'PATCH' });
+    toast(data.message || 'Application approved! Student notified by email.', 'success');
+    rCoApps(); rCompanyStats();
   } catch(_) {}
 }
 
 async function rejectApp(id) {
   try {
-    await api(`/applications/${id}/reject`, { method: 'PATCH' });
-    toast('Application rejected', 'info'); rCoApps(); rCompanyStats();
+    const data = await api(`/applications/${id}/reject`, { method: 'PATCH' });
+    toast(data.message || 'Application rejected. Student notified by email.', 'info');
+    rCoApps(); rCompanyStats();
   } catch(_) {}
 }
 
 async function doPlace(appId) {
   try {
     await api('/placements', { method: 'POST', body: JSON.stringify({ application_id: appId }) });
-    toast('Intern placed!', 'success'); rCoApps(); rCompanyStats();
+    toast('Intern placed!', 'success'); rCoApps(); rCoPlacements(); rCompanyStats();
+  } catch(_) {}
+}
+
+async function rCoPlacements() {
+  const el = document.getElementById('coPlacements');
+  if (!el) return;
+  el.innerHTML = loading();
+  try {
+    const list = await api('/placements/company');
+    if (!list.length) { el.innerHTML = empt('No placements yet.'); return; }
+    el.innerHTML = list.map(p => `<div class="card">
+      <div class="card-title">${p.student_name}</div>
+      <div class="card-meta">${p.institution || '—'}</div>
+      <div class="card-meta">${p.internship_title}</div>
+      <div class="card-meta">Start: ${fmt(p.start_date)}${p.end_date ? ' · End: ' + fmt(p.end_date) : ''}</div>
+      <div class="card-tags"><span class="badge badge-${p.status === 'completed' ? 'completed' : 'active'}">${cap(p.status)}</span></div>
+      <div class="card-actions">
+        ${p.status === 'active'
+          ? `<button class="btn btn-primary btn-sm" onclick="completePlacement(${p.id})">Mark Completed</button>`
+          : `<button class="btn btn-outline btn-sm" onclick="openCompletionLetter(${p.id})">View Completion Letter</button>`}
+      </div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load placements.'); }
+}
+
+async function completePlacement(id) {
+  if (!confirm('Mark this internship as completed? The student will be able to download their letter of completion.')) return;
+  try {
+    const data = await api(`/placements/${id}/complete`, { method: 'PATCH', body: JSON.stringify({}) });
+    toast(data.message || 'Placement completed!', 'success');
+    rCoPlacements(); rCoApps();
   } catch(_) {}
 }
 
@@ -791,7 +2130,7 @@ async function rCoLogbooks() {
   const el = document.getElementById('coLogbooks');
   el.innerHTML = loading();
   try {
-    const logs = await api('/logbooks/company');
+    const logs = await api('/logbooks/company' + logbookQuery('coLog'));
     if (!logs.length) { el.innerHTML = empt('No logbook entries yet from your placed interns.'); return; }
     el.innerHTML = logs.map(l => `<div class="card">
       <div class="card-company">${l.student_name} · ${l.institution || '—'}</div>
@@ -826,6 +2165,9 @@ async function rUsers(filter = '') {
   el.innerHTML = loading();
   try {
     if (!_allUsers.length) _allUsers = await api('/admin/users');
+    const recentUsers = _allUsers.slice(0, 5);
+    document.getElementById('adminRecentUsers').innerHTML = recentUsers.map(u => `<div style="padding:.75rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;"><div><b style="color:var(--text);">${u.name}</b><br><small style="color:var(--text-muted);">${u.email}</small></div><span class="tag ${rtag(u.role)}">${cap(u.role)}</span></div>`).join('');
+
     const list = _allUsers.filter(u =>
       !filter ||
       u.name.toLowerCase().includes(filter) ||
@@ -893,16 +2235,45 @@ async function rAdminPlacements() {
   el.innerHTML = loading();
   try {
     const list = await api('/placements');
+    const recentPlacements = list.slice(0, 5);
+    document.getElementById('adminRecentPlacements').innerHTML = recentPlacements.map(p => `<div style="padding:.75rem; border-bottom:1px solid var(--border);"><div><b style="color:var(--text);">${p.student_name}</b> <span style="color:var(--text-muted);">at</span> <b style="color:var(--text);">${p.company_name}</b></div><small style="color:var(--text-muted);">${p.internship_title}</small></div>`).join('');
+
     if (!list.length) { el.innerHTML = empt('No placements recorded yet'); return; }
     el.innerHTML = list.map(p => `<div class="card">
       <div class="card-company">${p.company_name}</div>
       <div class="card-title">${p.student_name}</div>
       <div class="card-meta">${p.institution || '—'}</div>
       <div class="card-meta">${p.internship_title}</div>
-      <div class="card-meta">Start: ${fmt(p.start_date)}</div>
-      <div class="card-tags"><span class="badge badge-active">${cap(p.status)}</span></div>
+      <div class="card-meta">Start: ${fmt(p.start_date)}${p.end_date ? ' · End: ' + fmt(p.end_date) : ''}</div>
+      <div class="card-tags"><span class="badge badge-${p.status === 'completed' ? 'completed' : 'active'}">${cap(p.status)}</span></div>
+      <div class="card-actions">
+        ${p.status === 'active'
+          ? `<button class="btn btn-primary btn-sm" onclick="completePlacement(${p.id})">Mark Completed</button>`
+          : `<button class="btn btn-outline btn-sm" onclick="openCompletionLetter(${p.id})">View Letter</button>`}
+      </div>
     </div>`).join('');
   } catch(_) { el.innerHTML = empt('Could not load placements.'); }
+}
+
+async function rAdminLogbooks() {
+  const el = document.getElementById('adminLogbooks');
+  if (!el) return;
+  el.innerHTML = loading();
+  try {
+    const logs = await api('/logbooks/admin' + logbookQuery('adLog'));
+    if (!logs.length) { el.innerHTML = empt('No logbook records found.'); return; }
+    el.innerHTML = logs.map(l => `<div class="card">
+      <div class="card-company">${l.student_name} · ${l.company_name || '—'}</div>
+      <div class="card-title">${fmt(l.date)} — ${l.internship_title || 'Internship'}</div>
+      <div class="card-tags">
+        <span class="tag tag-blue">${l.hours_worked} hrs</span>
+        ${l.approved ? `<span class="tag tag-green">Approved</span>` : `<span class="tag tag-amber">Pending</span>`}
+        <span class="tag tag-gray">#${l.id}</span>
+      </div>
+      <div class="card-desc">${l.description}</div>
+      <div class="card-meta">${l.student_email || ''} · ${l.institution || '—'}</div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load logbook records.'); }
 }
 
 /* ── HELPERS ────────────────────────────────── */
@@ -924,8 +2295,85 @@ if (currentUser && token) {
   go(currentUser.role === 'company' ? 'companyDashboard' : currentUser.role === 'admin' ? 'admin' : 'studentDashboard');
 } else {
   setSidebar(null);
-  go('login');
+  go('home');
 }
+
+const homeNav = document.getElementById('homeNav');
+if (homeNav) {
+  window.addEventListener('scroll', () => {
+    if (!document.body.classList.contains('home-mode')) return;
+    homeNav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+}
+
+/* ── 3D SHOWCASE ANIMATION ──────────────────── */
+(function initShowcase() {
+  // Spawn floating particles
+  const particleContainer = document.getElementById('showcaseParticles');
+  if (particleContainer) {
+    const count = 28;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'showcase-particle';
+      const leftPct = Math.random() * 100;
+      const size    = 1.5 + Math.random() * 2.5;
+      const dur     = 8 + Math.random() * 14;
+      const delay   = Math.random() * dur;
+      p.style.cssText = `
+        left: ${leftPct}%;
+        width: ${size}px;
+        height: ${size}px;
+        animation-duration: ${dur}s;
+        animation-delay: -${delay}s;
+        opacity: ${0.3 + Math.random() * 0.5};
+        background: ${Math.random() > .5 ? 'rgba(217,119,6,.7)' : 'rgba(2,132,199,.6)'};
+      `;
+      particleContainer.appendChild(p);
+    }
+  }
+
+  const section = document.getElementById('internship-showcase');
+  if (!section) return;
+
+  // Animated number counters — fire once when stats come into view
+  const statsEl = document.getElementById('showcaseStats');
+  if (statsEl) {
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        statsObserver.unobserve(entry.target);
+        entry.target.querySelectorAll('.count-up').forEach(el => {
+          const target   = parseInt(el.dataset.target, 10);
+          const suffix   = el.dataset.suffix || '';
+          const useComma = el.dataset.format === 'comma';
+          const dur      = 1800;   // ms
+          const start    = performance.now();
+          function step(now) {
+            const elapsed = Math.min(now - start, dur);
+            const eased   = 1 - Math.pow(1 - elapsed / dur, 3); // cubic ease-out
+            const value   = Math.round(eased * target);
+            el.textContent = (useComma ? value.toLocaleString() : value) + suffix;
+            if (elapsed < dur) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      });
+    }, { threshold: 0.1 });
+    statsObserver.observe(statsEl);
+
+    // Fallback: trigger animation after 1.5 seconds if it hasn't fired yet
+    setTimeout(() => {
+      statsEl.querySelectorAll('.count-up').forEach(el => {
+        if (el.textContent === '0+' || el.textContent === '0%') {
+          const target   = parseInt(el.dataset.target, 10);
+          const suffix   = el.dataset.suffix || '';
+          const useComma = el.dataset.format === 'comma';
+          el.textContent = (useComma ? target.toLocaleString() : target) + suffix;
+        }
+      });
+    }, 1500);
+  }
+})();
 </script>
 </body>
 </html>

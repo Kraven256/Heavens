@@ -18,8 +18,14 @@ CREATE TABLE IF NOT EXISTS users (
   company_name  VARCHAR(255)  DEFAULT NULL,
   location      VARCHAR(255)  DEFAULT NULL,
   is_active     BOOLEAN       DEFAULT TRUE,
+  reset_token   VARCHAR(64)   DEFAULT NULL,
+  reset_expires DATETIME      DEFAULT NULL,
   created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ── Password Reset columns (run if upgrading an existing DB) ──
+-- ALTER TABLE users ADD COLUMN reset_token   VARCHAR(64) DEFAULT NULL;
+-- ALTER TABLE users ADD COLUMN reset_expires DATETIME   DEFAULT NULL;
 
 -- ── Internships ───────────────────────────────────
 CREATE TABLE IF NOT EXISTS internships (

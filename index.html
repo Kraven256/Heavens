@@ -169,7 +169,8 @@ body.home-mode .content{padding:0;max-width:100%;}
 
 @media(max-width:900px){
   .home-hero-inner{grid-template-columns:1fr;gap:2rem;}
-  .home-hero-visual{order:-1;}
+  /* "Everything in one portal" card stays below the hero text on mobile */
+  .home-hero-visual{order:1;}
   .home-features,.home-audience{grid-template-columns:1fr;}
   .home-steps{grid-template-columns:repeat(2,1fr);}
   .home-nav{padding:1rem 1.25rem;}
@@ -2182,7 +2183,9 @@ async function rUsers(filter = '') {
       ${u.institution   ? `<div class="card-meta">${u.institution}</div>` : ''}
       ${u.company_name  ? `<div class="card-meta">${u.company_name}, ${u.location}</div>` : ''}
       <div class="card-actions">
-        <button class="btn btn-danger btn-sm" onclick="delUser(${u.id})">Delete</button>
+        ${u.role === 'admin'
+          ? `<span class="badge badge-approved" style="cursor:default;" title="Admin accounts are protected and cannot be deleted">🛡️ Protected</span>`
+          : `<button class="btn btn-danger btn-sm" onclick="delUser(${u.id})">Delete</button>`}
       </div>
     </div>`).join('');
   } catch(_) { el.innerHTML = empt('Could not load users.'); }
@@ -2191,6 +2194,12 @@ async function rUsers(filter = '') {
 function filterUsers(f) { rUsers(f.toLowerCase()); }
 
 async function delUser(id) {
+  /* ── Admin Protection: prevent deletion of admin accounts ── */
+  const targetUser = _allUsers.find(u => u.id === id);
+  if (targetUser && targetUser.role === 'admin') {
+    toast('Admin accounts are protected and cannot be deleted.', 'error');
+    return;
+  }
   if (!confirm('Delete this user?')) return;
   try {
     await api(`/admin/users/${id}`, { method: 'DELETE' });

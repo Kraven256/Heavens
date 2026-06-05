@@ -277,7 +277,7 @@ body.home-mode .content{padding:0;max-width:100%;}
 .main-wrap{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh;}
 .topbar{background:var(--paper);border-bottom:1px solid var(--border);padding:1.1rem 2.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;}
 .hamburger{display:none;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text);padding:.2rem;line-height:1;}
-.topbar-title{font-family:var(--display);font-size:1.4rem;color:var(--text);flex:1;font-style:italic;}
+.topbar-title{font-family:var(--display);font-size:1.4rem;color:var(--text);flex:1;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .topbar-chip{background:var(--mint-lt);color:var(--green);font-size:.72rem;font-weight:700;padding:.3rem .9rem;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;display:none;}
 .content{padding:2.5rem 3rem;flex:1;max-width:1200px;width:100%;}
 
@@ -394,7 +394,8 @@ body.home-mode .content{padding:0;max-width:100%;}
 .stat-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:700;}
 
 /* TABS */
-.tab-bar{display:flex;gap:.4rem;border-bottom:2px solid var(--border);margin-bottom:2rem;}
+.tab-bar{display:flex;gap:.4rem;border-bottom:2px solid var(--border);margin-bottom:2rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-bar::-webkit-scrollbar{display:none;}
 .tab{background:none;border:none;padding:.8rem 1.4rem;font-family:var(--font);font-size:.88rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;border-radius:8px 8px 0 0;white-space:nowrap;}
 .tab:hover{color:var(--text);background:var(--sand);}
 .tab.active{color:var(--green);border-bottom-color:var(--green);font-weight:700;}
@@ -462,6 +463,7 @@ body.home-mode .content{padding:0;max-width:100%;}
   .sidebar.open{transform:translateX(0);box-shadow:0 0 0 100vw rgba(0,0,0,.4);}
   .main-wrap{margin-left:0;}
   .hamburger{display:block;}
+  .topbar{padding:1rem 1.25rem;}
   .content{padding:1.5rem 1.25rem;}
   .stats-row{grid-template-columns:repeat(2,1fr);}
   .grid{grid-template-columns:1fr;}

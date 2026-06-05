@@ -924,148 +924,7 @@ img.ad-company-logo {
 .code-warn{font-size:.78rem;color:rgba(255,255,255,.5);margin-top:.4rem;}
 .info-alert{background:var(--sky-lt);border:1px solid var(--sky);border-radius:var(--r);padding:1rem 1.1rem;font-size:.85rem;color:var(--sky);line-height:1.55;margin-bottom:1.25rem;}
 .success-circle{width:72px;height:72px;border-radius:50%;background:var(--mint-lt);border:3px solid var(--mint);display:grid;place-items:center;font-size:2rem;margin:0 auto 1.25rem;}
-
-/* ════════════════════════════════════════════════════════
-   PREMIUM ADMIN DARK DASHBOARD  (scoped to #admin)
-════════════════════════════════════════════════════════ */
-#admin{background:#0B1220;margin:-2.5rem -3rem -3rem;padding:2.5rem 3rem 3rem;min-height:calc(100vh - 68px);position:relative;}
-#admin::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 50% 40% at 20% 20%,rgba(34,211,238,.06) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 80% 80%,rgba(59,130,246,.05) 0%,transparent 70%);pointer-events:none;z-index:0;}
-#admin > *{position:relative;z-index:1;}
-@media(max-width:900px){#admin{margin:-1.5rem -1.25rem -2rem;padding:1.5rem 1.25rem 2rem;}}
-@media(max-width:500px){#admin{margin:-1.25rem -1rem -2rem;padding:1.25rem 1rem 2rem;}}
-.ad-page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.75rem;}
-.ad-eyebrow{font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:#22D3EE;font-weight:700;margin-bottom:.3rem;}
-.ad-page-title{font-size:1.65rem;font-weight:800;color:#F0F6FF;line-height:1.2;}
-.ad-page-sub{font-size:.85rem;color:#94A3B8;margin-top:.3rem;}
-.ad-live-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:700;color:#34D399;background:rgba(52,211,153,.12);padding:.25rem .7rem;border-radius:999px;}
-.ad-live-dot{width:6px;height:6px;border-radius:50%;background:#34D399;animation:adPulse 1.5s infinite;}
-@keyframes adPulse{0%,100%{opacity:1}50%{opacity:.3}}
-#admin .tab-bar{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.4rem;margin-bottom:1.5rem;gap:.2rem;border-bottom:none;}
-#admin .tab{border-radius:10px;color:#94A3B8;font-weight:600;padding:.65rem 1.1rem;border-bottom:none;}
-#admin .tab:hover{background:rgba(255,255,255,.06);color:#F0F6FF;}
-#admin .tab.active{background:linear-gradient(135deg,rgba(34,211,238,.15),rgba(59,130,246,.1));color:#22D3EE;border-bottom:none;box-shadow:0 0 20px rgba(34,211,238,.1);}
-#admin .tab-content{display:none;}
-#admin .tab-content.active{display:block;animation:adFadeUp .3s ease;}
-@keyframes adFadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.ad-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
-@media(max-width:1000px){.ad-stats-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:600px){.ad-stats-grid{grid-template-columns:1fr 1fr;gap:.75rem;}}
-.ad-glass-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:20px;backdrop-filter:blur(12px);transition:all .22s;position:relative;overflow:hidden;}
-.ad-glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.35),transparent);opacity:0;transition:opacity .22s;}
-.ad-glass-card:hover{border-color:rgba(34,211,238,.18);transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,0,0,.4);}
-.ad-glass-card:hover::before{opacity:1;}
-.ad-stat-card{padding:1.4rem 1.35rem;}
-.ad-stat-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.85rem;}
-.ad-stat-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.15rem;}
-.ad-stat-icon.cyan{background:rgba(34,211,238,.12);}
-.ad-stat-icon.blue{background:rgba(59,130,246,.12);}
-.ad-stat-icon.purple{background:rgba(167,139,250,.12);}
-.ad-stat-icon.green{background:rgba(52,211,153,.12);}
-.ad-stat-icon.amber{background:rgba(251,191,36,.12);}
-.ad-stat-trend{font-size:.68rem;font-weight:700;padding:.2rem .55rem;border-radius:999px;}
-.ad-stat-trend.up{background:rgba(52,211,153,.12);color:#34D399;}
-.ad-stat-trend.down{background:rgba(248,113,113,.12);color:#F87171;}
-.ad-stat-trend.flat{background:rgba(251,191,36,.12);color:#FBBF24;}
-.ad-stat-value{font-size:1.95rem;font-weight:800;color:#F0F6FF;letter-spacing:-.02em;line-height:1;margin-bottom:.3rem;}
-.ad-stat-label{font-size:.75rem;color:#94A3B8;font-weight:500;}
-.ad-stat-bar{margin-top:1rem;height:3px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;}
-.ad-stat-fill{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
-.ad-stat-fill.cyan{background:linear-gradient(90deg,#22D3EE,#60A5FA);}
-.ad-stat-fill.blue{background:linear-gradient(90deg,#3B82F6,#6366F1);}
-.ad-stat-fill.purple{background:linear-gradient(90deg,#A78BFA,#EC4899);}
-.ad-stat-fill.green{background:linear-gradient(90deg,#34D399,#10B981);}
-.ad-stat-fill.amber{background:linear-gradient(90deg,#FBBF24,#F59E0B);}
-.ad-main-grid{display:grid;grid-template-columns:1fr 340px;gap:1.25rem;margin-bottom:1.25rem;}
-.ad-second-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
-@media(max-width:1100px){.ad-main-grid{grid-template-columns:1fr;}}
-@media(max-width:900px){.ad-second-grid{grid-template-columns:1fr;}}
-.ad-card-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem 0;margin-bottom:1.1rem;flex-wrap:wrap;gap:.5rem;}
-.ad-card-title{font-size:.9rem;font-weight:700;color:#F0F6FF;}
-.ad-card-body{padding:0 1.5rem 1.5rem;}
-.ad-btn{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem 1.15rem;border-radius:10px;font-family:var(--font);font-size:.82rem;font-weight:700;cursor:pointer;border:none;transition:all .22s;}
-.ad-btn-primary{background:linear-gradient(135deg,#22D3EE,#3B82F6);color:#0B1220;}
-.ad-btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(34,211,238,.4);}
-.ad-btn-ghost{background:rgba(255,255,255,.06);color:#94A3B8;border:1px solid rgba(255,255,255,.08);}
-.ad-btn-ghost:hover{color:#22D3EE;border-color:rgba(34,211,238,.25);}
-.ad-btn-sm{padding:.4rem .85rem;font-size:.75rem;border-radius:8px;}
-.ad-select{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#94A3B8;border-radius:8px;padding:.3rem .6rem;font-size:.72rem;font-family:var(--font);outline:none;cursor:pointer;}
-.ad-company-row{display:flex;align-items:center;gap:.85rem;padding:.7rem .85rem;border-radius:11px;border:1px solid transparent;transition:all .22s;cursor:pointer;margin-bottom:.35rem;}
-.ad-company-row:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.07);}
-.ad-company-logo{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:.9rem;flex-shrink:0;}
-.ad-company-name{font-size:.82rem;font-weight:700;color:#F0F6FF;}
-.ad-company-sector{font-size:.68rem;color:#64748B;margin-top:1px;}
-.ad-company-count{font-size:.72rem;font-weight:700;color:#22D3EE;background:rgba(34,211,238,.1);padding:.18rem .55rem;border-radius:6px;}
-.ad-verified{width:14px;height:14px;border-radius:50%;background:#22D3EE;display:grid;place-items:center;font-size:.5rem;color:#0B1220;font-weight:900;}
-.ad-donut-wrap{display:flex;align-items:center;gap:1.5rem;}
-.ad-donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.ad-donut-val{font-size:1.3rem;font-weight:800;color:#F0F6FF;}
-.ad-donut-lbl{font-size:.6rem;color:#64748B;text-transform:uppercase;letter-spacing:.08em;}
-.ad-donut-legend-item{display:flex;align-items:center;gap:.55rem;margin-bottom:.55rem;font-size:.75rem;}
-.ad-donut-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0;}
-.ad-donut-label{color:#94A3B8;flex:1;}
-.ad-donut-val2{color:#F0F6FF;font-weight:700;}
-.ad-user-row{display:flex;align-items:center;gap:.75rem;padding:.6rem .3rem;border-bottom:1px solid rgba(255,255,255,.05);}
-.ad-user-row:last-child{border-bottom:none;}
-.ad-user-av{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:.68rem;color:#0B1220;flex-shrink:0;}
-.ad-user-name{font-size:.8rem;font-weight:600;color:#F0F6FF;}
-.ad-user-email{font-size:.67rem;color:#64748B;}
-.ad-role-badge{padding:.18rem .5rem;border-radius:999px;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
-.ad-role-student{background:rgba(59,130,246,.15);color:#60A5FA;}
-.ad-role-company{background:rgba(52,211,153,.15);color:#34D399;}
-.ad-role-admin{background:rgba(34,211,238,.15);color:#22D3EE;}
-.ad-placement-row{display:flex;align-items:center;gap:.75rem;padding:.65rem .3rem;border-bottom:1px solid rgba(255,255,255,.05);}
-.ad-placement-row:last-child{border-bottom:none;}
-.ad-placement-name{font-size:.8rem;font-weight:600;color:#F0F6FF;}
-.ad-placement-sub{font-size:.68rem;color:#64748B;}
-.ad-placement-badge{padding:.18rem .5rem;border-radius:999px;font-size:.62rem;font-weight:700;text-transform:uppercase;white-space:nowrap;}
-.ad-placement-badge.active{background:rgba(34,211,238,.15);color:#22D3EE;}
-.ad-placement-badge.completed{background:rgba(52,211,153,.15);color:#34D399;}
-.ad-category-row{margin-bottom:.85rem;}
-.ad-cat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;}
-.ad-cat-name{font-size:.82rem;font-weight:600;color:#F0F6FF;}
-.ad-cat-count{font-size:.72rem;color:#64748B;}
-.ad-cat-bar{height:5px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;}
-.ad-cat-fill{height:100%;border-radius:99px;transition:width 1.4s cubic-bezier(.4,0,.2,1);}
-.ad-toolbar{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.06);}
-.ad-search-wrap{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:.5rem .9rem;flex:1;max-width:320px;}
-.ad-search-wrap input{background:none;border:none;outline:none;color:#F0F6FF;font-family:var(--font);font-size:.82rem;flex:1;}
-.ad-search-wrap input::placeholder{color:#64748B;}
-.ad-count{margin-left:auto;font-size:.72rem;color:#64748B;}
-#admin table{width:100%;border-collapse:collapse;}
-#admin thead tr{background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.06);}
-#admin th{padding:.75rem 1rem;text-align:left;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#64748B;white-space:nowrap;}
-#admin td{padding:.85rem 1rem;font-size:.83rem;color:#94A3B8;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle;}
-#admin tbody tr:hover{background:rgba(255,255,255,.03);}
-#admin tbody tr:last-child td{border-bottom:none;}
-#admin .ad-td-name{color:#F0F6FF;font-weight:600;}
-#admin .card{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.07);}
-#admin .card:hover{border-color:rgba(34,211,238,.2);box-shadow:0 8px 30px rgba(0,0,0,.4);}
-#admin .card-company{color:#22D3EE;}
-#admin .card-title{color:#F0F6FF;}
-#admin .card-desc{color:#94A3B8;}
-#admin .card-meta{color:#64748B;}
-#admin .empty-msg{color:#64748B;}
-#admin .tag-blue{background:rgba(59,130,246,.15);color:#60A5FA;}
-#admin .tag-green{background:rgba(52,211,153,.15);color:#34D399;}
-#admin .tag-amber{background:rgba(251,191,36,.15);color:#FBBF24;}
-#admin .tag-gray{background:rgba(255,255,255,.06);color:#94A3B8;}
-#admin .badge-pending{background:rgba(251,191,36,.15);color:#FBBF24;}
-#admin .badge-approved{background:rgba(52,211,153,.15);color:#34D399;}
-#admin .badge-rejected{background:rgba(248,113,113,.15);color:#F87171;}
-#admin .badge-active{background:rgba(34,211,238,.15);color:#22D3EE;}
-#admin .badge-completed{background:rgba(52,211,153,.15);color:#34D399;}
-#admin .badge-open{background:rgba(34,211,238,.15);color:#22D3EE;}
-#admin .badge-closed{background:rgba(255,255,255,.06);color:#94A3B8;}
-#admin .btn-primary{background:linear-gradient(135deg,#22D3EE,#3B82F6);color:#0B1220;}
-#admin .btn-outline{border-color:rgba(34,211,238,.3);color:#22D3EE;background:transparent;}
-#admin .btn-ghost{background:rgba(255,255,255,.06);color:#94A3B8;border-color:rgba(255,255,255,.08);}
-#admin .btn-danger{background:rgba(248,113,113,.12);color:#F87171;border-color:rgba(248,113,113,.2);}
-#admin .btn-danger:hover{background:rgba(248,113,113,.25);}
-#admin .field label{color:#94A3B8;}
-#admin .field input,#admin .field select{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.08);color:#F0F6FF;}
-#admin .field input:focus,#admin .field select:focus{border-color:#22D3EE;background:rgba(34,211,238,.06);box-shadow:0 0 0 3px rgba(34,211,238,.12);}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -1639,177 +1498,49 @@ img.ad-company-logo {
 
     <!-- ADMIN -->
     <section id="admin" class="section">
-
-      <!-- Page Header -->
-      <div class="ad-page-header">
-        <div>
-          <div class="ad-eyebrow">Administrator</div>
-          <h2 class="ad-page-title">Admin Dashboard</h2>
-          <p class="ad-page-sub">Real-time platform management — Uganda's internship network</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:.75rem">
-          <div class="ad-live-badge"><span class="ad-live-dot"></span>Live</div>
-          <button class="ad-btn ad-btn-primary ad-btn-sm" onclick="go('studentDashboard')">Browse Portal</button>
-        </div>
+      <div class="page-header">
+        <div class="page-eyebrow">Administrator</div>
+        <h2 class="page-title">Admin Panel</h2>
+        <p class="page-sub">Manage all users, internships and placements</p>
       </div>
-
-      <!-- Tab Navigation -->
       <div class="tab-bar">
-        <button class="tab active" onclick="switchTab(this,'ad-dashboard')">📊 Dashboard</button>
-        <button class="tab" onclick="switchTab(this,'ad-users')">👥 Users</button>
-        <button class="tab" onclick="switchTab(this,'ad-internships')">💼 Internships</button>
-        <button class="tab" onclick="switchTab(this,'ad-placements')">📍 Placements</button>
-        <button class="tab" onclick="switchTab(this,'ad-logbooks')">📋 Logbooks</button>
+        <button class="tab active" onclick="switchTab(this,'ad-dashboard')">Dashboard</button>
+        <button class="tab" onclick="switchTab(this,'ad-users')">Users</button>
+        <button class="tab" onclick="switchTab(this,'ad-internships')">Internships</button>
+        <button class="tab" onclick="switchTab(this,'ad-placements')">Placements</button>
+        <button class="tab" onclick="switchTab(this,'ad-logbooks')">Logbook Records</button>
       </div>
-
-      <!-- ── DASHBOARD TAB ── -->
+      
       <div id="ad-dashboard" class="tab-content active">
-
-        <!-- Stats Grid -->
-        <div class="ad-stats-grid" id="adminStats"></div>
-
-        <!-- Main Grid: Chart + Companies -->
-        <div class="ad-main-grid">
-          <div class="ad-glass-card">
-            <div class="ad-card-header">
-              <div class="ad-card-title">📈 Monthly Placements &amp; Applications</div>
-              <select class="ad-select">
-                <option>Last 12 months</option>
-                <option>Last 6 months</option>
-              </select>
-            </div>
-            <div class="ad-card-body">
-              <div style="height:240px;position:relative">
-                <canvas id="adPlacementChart"></canvas>
-              </div>
-            </div>
+        <div class="stats-row" id="adminStats"></div>
+        <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <div class="dashboard-panel">
+            <h3 style="margin-bottom: 1rem; color: var(--text);">Recent Users</h3>
+            <div class="grid" id="adminRecentUsers"></div>
+            <button class="btn btn-ghost btn-sm" style="margin-top: 1rem;" onclick="document.querySelector('#admin .tab-bar .tab:nth-child(2)').click()">View All Users</button>
           </div>
-          <div class="ad-glass-card">
-            <div class="ad-card-header">
-              <div class="ad-card-title">🏢 Top Recruiting Partners</div>
-              <span style="font-size:.72rem;color:#64748B">This semester</span>
-            </div>
-            <div class="ad-card-body">
-              <div id="adCompaniesList"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Second Grid: Donut + Recent Users + Recent Placements -->
-        <div class="ad-second-grid">
-          <div class="ad-glass-card">
-            <div class="ad-card-header">
-              <div class="ad-card-title">🎯 Application Status</div>
-              <span style="font-size:.72rem;color:#64748B">All time</span>
-            </div>
-            <div class="ad-card-body">
-              <div class="ad-donut-wrap">
-                <div style="position:relative;width:140px;height:140px;flex-shrink:0">
-                  <canvas id="adDonutChart" width="140" height="140"></canvas>
-                  <div class="ad-donut-center">
-                    <div class="ad-donut-val" id="adDonutTotal">—</div>
-                    <div class="ad-donut-lbl">Total</div>
-                  </div>
-                </div>
-                <div id="adDonutLegend"></div>
-              </div>
-            </div>
-          </div>
-          <div class="ad-glass-card">
-            <div class="ad-card-header">
-              <div class="ad-card-title">👥 Recent Users</div>
-              <button class="ad-btn ad-btn-ghost ad-btn-sm" onclick="document.querySelector('#admin .tab-bar .tab:nth-child(2)').click()">View all →</button>
-            </div>
-            <div class="ad-card-body">
-              <div id="adminRecentUsers"></div>
-            </div>
-          </div>
-          <div class="ad-glass-card">
-            <div class="ad-card-header">
-              <div class="ad-card-title">📍 Recent Placements</div>
-              <button class="ad-btn ad-btn-ghost ad-btn-sm" onclick="document.querySelector('#admin .tab-bar .tab:nth-child(4)').click()">View all →</button>
-            </div>
-            <div class="ad-card-body">
-              <div id="adminRecentPlacements"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom: Categories -->
-        <div class="ad-glass-card" style="margin-bottom:1.25rem">
-          <div class="ad-card-header">
-            <div class="ad-card-title">💻 Top Internship Categories</div>
-          </div>
-          <div class="ad-card-body">
-            <div id="adCategories" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem"></div>
+          <div class="dashboard-panel">
+            <h3 style="margin-bottom: 1rem; color: var(--text);">Recent Placements</h3>
+            <div class="grid" id="adminRecentPlacements"></div>
+            <button class="btn btn-ghost btn-sm" style="margin-top: 1rem;" onclick="document.querySelector('#admin .tab-bar .tab:nth-child(4)').click()">View All Placements</button>
           </div>
         </div>
       </div>
 
-      <!-- ── USERS TAB ── -->
       <div id="ad-users" class="tab-content">
-        <div class="ad-glass-card">
-          <div class="ad-toolbar">
-            <div class="ad-card-title" style="font-size:.88rem">👥 All Users</div>
-            <div class="ad-search-wrap">
-              <span style="color:#64748B">🔍</span>
-              <input type="text" placeholder="Filter by name, email or role…" oninput="filterUsers(this.value)">
-            </div>
-            <span class="ad-count" id="adUsersCount"></span>
-          </div>
-          <div style="overflow-x:auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>User</th><th>Role</th><th>Email</th><th>Institution / Company</th><th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="usersList"></tbody>
-            </table>
-          </div>
-        </div>
+        <div class="search-wrap"><span class="search-icon">Search</span><input type="text" placeholder="Filter by name, email or role…" oninput="filterUsers(this.value)"></div>
+        <div class="grid" id="usersList"></div>
       </div>
-
-      <!-- ── INTERNSHIPS TAB ── -->
-      <div id="ad-internships" class="tab-content">
-        <div class="ad-glass-card" style="padding:0">
-          <div class="ad-card-header" style="padding:1.25rem 1.5rem">
-            <div class="ad-card-title">💼 All Internship Listings</div>
-          </div>
-          <div style="padding:0 1.5rem 1.5rem">
-            <div class="grid" id="adminInternships"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── PLACEMENTS TAB ── -->
-      <div id="ad-placements" class="tab-content">
-        <div class="ad-glass-card" style="padding:0">
-          <div class="ad-card-header" style="padding:1.25rem 1.5rem">
-            <div class="ad-card-title">📍 All Placements</div>
-          </div>
-          <div style="padding:0 1.5rem 1.5rem">
-            <div class="grid" id="adminPlacements"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── LOGBOOKS TAB ── -->
+      <div id="ad-internships" class="tab-content"><div class="grid" id="adminInternships"></div></div>
+      <div id="ad-placements" class="tab-content"><div class="grid" id="adminPlacements"></div></div>
       <div id="ad-logbooks" class="tab-content">
-        <div class="ad-glass-card" style="padding:0">
-          <div class="ad-card-header" style="padding:1.25rem 1.5rem;flex-wrap:wrap;gap:.75rem">
-            <div class="ad-card-title">📋 Logbook Records Archive</div>
-            <div style="display:flex;gap:.75rem;align-items:flex-end;flex-wrap:wrap">
-              <div class="field" style="margin:0"><label>From</label><input type="date" id="adLogFrom"></div>
-              <div class="field" style="margin:0"><label>To</label><input type="date" id="adLogTo"></div>
-              <button type="button" class="ad-btn ad-btn-ghost ad-btn-sm" onclick="rAdminLogbooks()">Filter</button>
-            </div>
-          </div>
-          <p style="padding:0 1.5rem .75rem;font-size:.82rem;color:#64748B">Full archive of all student logbook entries across the platform.</p>
-          <div style="padding:0 1.5rem 1.5rem">
-            <div class="grid" id="adminLogbooks"></div>
-          </div>
+        <p class="records-note">Full archive of all student logbook entries across the platform.</p>
+        <div class="records-bar">
+          <div class="field"><label>From</label><input type="date" id="adLogFrom"></div>
+          <div class="field"><label>To</label><input type="date" id="adLogTo"></div>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="rAdminLogbooks()">Filter</button>
         </div>
+        <div class="grid" id="adminLogbooks"></div>
       </div>
     </section>
 
@@ -2135,29 +1866,11 @@ async function rCompanyStats() {
 async function rAdminStats() {
   try {
     const stats = await api('/admin/stats');
-    const cards = [
-      { label:'Total Users',       val:stats.users,        icon:'🎓', color:'cyan',   bar:Math.min(100,stats.users/10),         trend:'+12%', dir:'up'   },
-      { label:'Internships',       val:stats.internships,  icon:'💼', color:'blue',   bar:Math.min(100,stats.internships*2),      trend:'+5',   dir:'up'   },
-      { label:'Applications',      val:stats.applications, icon:'📋', color:'amber',  bar:Math.min(100,stats.applications/5),     trend:'Live', dir:'flat' },
-      { label:'Placements Secured',val:stats.placements,   icon:'📍', color:'green',  bar:Math.min(100,stats.placements/3),       trend:'+18%', dir:'up'   },
-    ];
-    document.getElementById('adminStats').innerHTML = cards.map(c => `
-      <div class="ad-glass-card ad-stat-card">
-        <div class="ad-stat-top">
-          <div class="ad-stat-icon ${c.color}">${c.icon}</div>
-          <div class="ad-stat-trend ${c.dir}">${c.dir==='up'?'↑':c.dir==='down'?'↓':'→'} ${c.trend}</div>
-        </div>
-        <div class="ad-stat-value">${c.val}</div>
-        <div class="ad-stat-label">${c.label}</div>
-        <div class="ad-stat-bar"><div class="ad-stat-fill ${c.color}" style="width:0%" data-w="${c.bar}%"></div></div>
-      </div>
-    `).join('');
-    setTimeout(() => {
-      document.querySelectorAll('#adminStats .ad-stat-fill').forEach(b => b.style.width = b.dataset.w);
-    }, 150);
-    // Boot charts and widgets after stats load
-    adInitCharts();
-    adRenderCategories();
+    document.getElementById('adminStats').innerHTML =
+      sc(stats.users, 'Total Users') +
+      sc(stats.internships, 'Internships') +
+      sc(stats.applications, 'Applications') +
+      sc(stats.placements, 'Placements');
   } catch(_) {}
 }
 
@@ -2517,57 +2230,33 @@ async function approveLogbook(id) {
 /* ── ADMIN: USERS ───────────────────────────── */
 let _allUsers = [];
 async function rUsers(filter = '') {
-  const tbody  = document.getElementById('usersList');
-  const countEl = document.getElementById('adUsersCount');
-  if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#64748B;padding:2rem">Loading…</td></tr>`;
+  const el = document.getElementById('usersList');
+  el.innerHTML = loading();
   try {
     if (!_allUsers.length) _allUsers = await api('/admin/users');
-    // Recent users widget (dark themed)
-    const recentEl = document.getElementById('adminRecentUsers');
-    if (recentEl) {
-      recentEl.innerHTML = _allUsers.slice(0, 6).map(u => `
-        <div class="ad-user-row">
-          <div class="ad-user-av" style="background:${adRoleColor(u.role)}">${u.name[0]}</div>
-          <div style="flex:1;min-width:0">
-            <div class="ad-user-name">${u.name}</div>
-            <div class="ad-user-email">${u.email}</div>
-          </div>
-          <span class="ad-role-badge ad-role-${u.role}">${cap(u.role)}</span>
-        </div>
-      `).join('');
-    }
+    const recentUsers = _allUsers.slice(0, 5);
+    document.getElementById('adminRecentUsers').innerHTML = recentUsers.map(u => `<div style="padding:.75rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;"><div><b style="color:var(--text);">${u.name}</b><br><small style="color:var(--text-muted);">${u.email}</small></div><span class="tag ${rtag(u.role)}">${cap(u.role)}</span></div>`).join('');
+
     const list = _allUsers.filter(u =>
       !filter ||
       u.name.toLowerCase().includes(filter) ||
       u.role.includes(filter) ||
       u.email.includes(filter)
     );
-    if (countEl) countEl.textContent = `${list.length} of ${_allUsers.length} users`;
-    if (!list.length) {
-      if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#64748B;padding:2rem">No users found</td></tr>`;
-      return;
-    }
-    if (tbody) tbody.innerHTML = list.map(u => `
-      <tr>
-        <td>
-          <div style="display:flex;align-items:center;gap:.65rem">
-            <div style="width:32px;height:32px;border-radius:9px;background:${adRoleColor(u.role)};display:grid;place-items:center;font-weight:700;font-size:.72rem;color:#0B1220;flex-shrink:0">${u.name[0]}</div>
-            <span class="ad-td-name">${u.name}</span>
-          </div>
-        </td>
-        <td><span class="ad-role-badge ad-role-${u.role}">${cap(u.role)}</span></td>
-        <td>${u.email}</td>
-        <td>${u.institution || u.company_name || '—'}</td>
-        <td>
-          ${u.role === 'admin'
-            ? `<span class="badge badge-approved" style="cursor:default" title="Admin accounts are protected and cannot be deleted">🛡️ Protected</span>`
-            : `<button class="btn btn-danger btn-sm" onclick="delUser(${u.id})">Delete</button>`}
-        </td>
-      </tr>
-    `).join('');
-  } catch(_) {
-    if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#64748B;padding:2rem">Could not load users.</td></tr>`;
-  }
+    if (!list.length) { el.innerHTML = empt('No users found'); return; }
+    el.innerHTML = list.map(u => `<div class="card">
+      <div class="card-title">${u.name}</div>
+      <div class="card-tags"><span class="tag ${rtag(u.role)}">${cap(u.role)}</span></div>
+      <div class="card-meta">${u.email}</div>
+      ${u.institution   ? `<div class="card-meta">${u.institution}</div>` : ''}
+      ${u.company_name  ? `<div class="card-meta">${u.company_name}, ${u.location}</div>` : ''}
+      <div class="card-actions">
+        ${u.role === 'admin'
+          ? `<span class="badge badge-approved" style="cursor:default;" title="Admin accounts are protected and cannot be deleted">🛡️ Protected</span>`
+          : `<button class="btn btn-danger btn-sm" onclick="delUser(${u.id})">Delete</button>`}
+      </div>
+    </div>`).join('');
+  } catch(_) { el.innerHTML = empt('Could not load users.'); }
 }
 
 function filterUsers(f) { rUsers(f.toLowerCase()); }
@@ -2585,142 +2274,6 @@ async function delUser(id) {
     toast('User deleted', 'info');
     _allUsers = []; rUsers(); rAdminStats();
   } catch(_) {}
-}
-
-/* ── ADMIN: CHART & WIDGET HELPERS ─────────── */
-function adRoleColor(role) {
-  return { student:'#3B82F6', company:'#34D399', admin:'#22D3EE' }[role] || '#94A3B8';
-}
-
-function getCompanyLogo(name) {
-  const map = {
-    'mtn uganda': 'mtn.co.ug', 'mtn': 'mtn.co.ug',
-    'uganda revenue authority': 'ura.go.ug', 'ura': 'ura.go.ug',
-    'stanbic bank': 'stanbicbank.co.ug', 'stanbic bank uganda': 'stanbicbank.co.ug',
-    'safeboda': 'safeboda.com',
-    'airtel': 'airtel.co.ug', 'airtel uganda': 'airtel.co.ug',
-    'nita-u': 'nita.go.ug',
-    'centenary bank': 'centenarybank.co.ug',
-    'makerere university': 'mak.ac.ug'
-  };
-  const key = (name || '').toLowerCase().trim();
-  if (map[key]) return `https://logo.clearbit.com/${map[key]}`;
-  // Fallback to UI avatars
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || '?')}&background=random&color=fff`;
-}
-
-let _adPlacementChart = null, _adDonutChart = null;
-
-async function adInitCharts() {
-  if (typeof Chart === 'undefined') return;
-  if (_adPlacementChart) { _adPlacementChart.destroy(); _adPlacementChart = null; }
-  if (_adDonutChart)     { _adDonutChart.destroy();     _adDonutChart = null; }
-
-  // Line chart
-  const pc = document.getElementById('adPlacementChart');
-  if (pc) {
-    const ctx = pc.getContext('2d');
-    Chart.defaults.color = '#64748b';
-    Chart.defaults.font.family = "'Inter', sans-serif";
-    const gC = ctx.createLinearGradient(0,0,0,240);
-    gC.addColorStop(0,'rgba(34,211,238,.3)'); gC.addColorStop(1,'rgba(34,211,238,.01)');
-    const gB = ctx.createLinearGradient(0,0,0,240);
-    gB.addColorStop(0,'rgba(59,130,246,.2)'); gB.addColorStop(1,'rgba(59,130,246,.01)');
-    _adPlacementChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'],
-        datasets: [
-          { label:'Placements',  data:[18,24,32,28,35,41,38,45,52,48,58,67],  borderColor:'#22D3EE', backgroundColor:gC, borderWidth:2.5, tension:.45, fill:true, pointBackgroundColor:'#22D3EE', pointBorderColor:'#0B1220', pointBorderWidth:2, pointRadius:4, pointHoverRadius:7 },
-          { label:'Applications',data:[62,78,95,88,102,118,109,125,140,132,158,178], borderColor:'#3B82F6', backgroundColor:gB, borderWidth:2.5, tension:.45, fill:true, pointBackgroundColor:'#3B82F6', pointBorderColor:'#0B1220', pointBorderWidth:2, pointRadius:4, pointHoverRadius:7 }
-        ]
-      },
-      options: {
-        responsive:true, maintainAspectRatio:false,
-        interaction:{ mode:'index', intersect:false },
-        plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'rgba(13,25,48,.95)', borderColor:'rgba(34,211,238,.2)', borderWidth:1, padding:10, titleColor:'#fff', bodyColor:'#94A3B8' } },
-        scales:{
-          x:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748B',font:{size:11}} },
-          y:{ grid:{color:'rgba(255,255,255,.05)'}, ticks:{color:'#64748B',font:{size:11}}, beginAtZero:true }
-        }
-      }
-    });
-  }
-
-  // Donut chart
-  const dc = document.getElementById('adDonutChart');
-  if (dc) {
-    let apps = [];
-    try { apps = await api('/applications/admin') || []; } catch(_) {}
-    const approved = Array.isArray(apps) ? apps.filter(a => a.status==='approved').length : 0;
-    const pending  = Array.isArray(apps) ? apps.filter(a => a.status==='pending').length  : 0;
-    const rejected = Array.isArray(apps) ? apps.filter(a => a.status==='rejected').length : 0;
-    const total = approved + pending + rejected;
-    const dtEl = document.getElementById('adDonutTotal');
-    if (dtEl) dtEl.textContent = total > 0 ? total.toLocaleString() : '—';
-    const dd = [
-      { label:'Approved', val: approved || 1, color:'#34D399' },
-      { label:'Pending',  val: pending  || 0, color:'#FBBF24' },
-      { label:'Rejected', val: rejected || 0, color:'#F87171' },
-    ];
-    _adDonutChart = new Chart(dc.getContext('2d'), {
-      type:'doughnut',
-      data:{ labels:dd.map(d=>d.label), datasets:[{ data:dd.map(d=>d.val), backgroundColor:dd.map(d=>d.color), borderColor:'#0B1220', borderWidth:3, hoverOffset:6 }] },
-      options:{ responsive:false, cutout:'72%', plugins:{ legend:{display:false}, tooltip:{backgroundColor:'rgba(13,25,48,.95)',borderColor:'rgba(34,211,238,.2)',borderWidth:1,padding:10,titleColor:'#fff',bodyColor:'#94A3B8'} } }
-    });
-    const legEl = document.getElementById('adDonutLegend');
-    if (legEl) legEl.innerHTML = dd.map(d => `
-      <div class="ad-donut-legend-item">
-        <div class="ad-donut-dot" style="background:${d.color}"></div>
-        <div class="ad-donut-label">${d.label}</div>
-        <div class="ad-donut-val2">${d.val.toLocaleString()}</div>
-      </div>`).join('');
-  }
-
-  adRenderCompanies();
-}
-
-async function adRenderCompanies() {
-  const el = document.getElementById('adCompaniesList');
-  if (!el) return;
-  try {
-    const ints = await api('/internships');
-    const map = {};
-    ints.forEach(i => { if (!map[i.company_name]) map[i.company_name]={name:i.company_name,count:0}; map[i.company_name].count++; });
-    const sorted = Object.values(map).sort((a,b)=>b.count-a.count).slice(0,6);
-    el.innerHTML = sorted.length ? sorted.map((c,i)=>`
-      <div class="ad-company-row">
-        <img class="ad-company-logo" src="${getCompanyLogo(c.name)}" alt="${c.name}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(c.name)}&background=random&color=fff'">
-        <div style="flex:1;min-width:0">
-          <div class="ad-company-name">${c.name}</div>
-          <div class="ad-company-sector">Partner Company</div>
-        </div>
-        <div class="ad-verified">✓</div>
-        <div class="ad-company-count">${c.count}</div>
-      </div>`).join('')
-    : '<div style="color:#64748B;font-size:.82rem;padding:.5rem">No data yet</div>';
-  } catch(_) { el.innerHTML = '<div style="color:#64748B;font-size:.82rem">—</div>'; }
-}
-
-function adRenderCategories() {
-  const el = document.getElementById('adCategories');
-  if (!el) return;
-  const cats = [
-    { name:'Software Engineering', icon:'💻', pct:85, color:'linear-gradient(90deg,#22D3EE,#3B82F6)' },
-    { name:'Data Science',         icon:'📊', pct:65, color:'linear-gradient(90deg,#A78BFA,#6366F1)' },
-    { name:'Cybersecurity',        icon:'🔐', pct:45, color:'linear-gradient(90deg,#34D399,#10B981)' },
-    { name:'UI/UX Design',         icon:'🎨', pct:40, color:'linear-gradient(90deg,#FBBF24,#F59E0B)' },
-    { name:'Business Admin',       icon:'📁', pct:35, color:'linear-gradient(90deg,#F87171,#EF4444)' },
-    { name:'Civil Engineering',    icon:'🏗️', pct:28, color:'linear-gradient(90deg,#60A5FA,#818CF8)' },
-  ];
-  el.innerHTML = cats.map(c=>`
-    <div class="ad-category-row">
-      <div class="ad-cat-top"><div class="ad-cat-name">${c.icon} ${c.name}</div><div class="ad-cat-count">${c.pct}%</div></div>
-      <div class="ad-cat-bar"><div class="ad-cat-fill" style="width:0%;background:${c.color}" data-w="${c.pct}%"></div></div>
-    </div>`).join('');
-  setTimeout(() => {
-    document.querySelectorAll('#adCategories .ad-cat-fill').forEach(b => b.style.width = b.dataset.w);
-  }, 350);
 }
 
 /* ── ADMIN: INTERNSHIPS ─────────────────────── */
@@ -2759,18 +2312,8 @@ async function rAdminPlacements() {
   el.innerHTML = loading();
   try {
     const list = await api('/placements');
-    const recentPlacements = list.slice(0, 6);
-    const recEl = document.getElementById('adminRecentPlacements');
-    if (recEl) recEl.innerHTML = recentPlacements.map(p => `
-      <div class="ad-placement-row">
-        <div style="width:30px;height:30px;border-radius:9px;background:${p.status==='completed'?'#34D399':'#22D3EE'};display:grid;place-items:center;font-weight:700;font-size:.68rem;color:#0B1220;flex-shrink:0">${(p.student_name||'?')[0]}</div>
-        <div style="flex:1;min-width:0">
-          <div class="ad-placement-name">${p.student_name}</div>
-          <div class="ad-placement-sub">${p.internship_title} @ ${p.company_name}</div>
-        </div>
-        <span class="ad-placement-badge ${p.status}">${cap(p.status)}</span>
-      </div>
-    `).join('');
+    const recentPlacements = list.slice(0, 5);
+    document.getElementById('adminRecentPlacements').innerHTML = recentPlacements.map(p => `<div style="padding:.75rem; border-bottom:1px solid var(--border);"><div><b style="color:var(--text);">${p.student_name}</b> <span style="color:var(--text-muted);">at</span> <b style="color:var(--text);">${p.company_name}</b></div><small style="color:var(--text-muted);">${p.internship_title}</small></div>`).join('');
 
     if (!list.length) { el.innerHTML = empt('No placements recorded yet'); return; }
     el.innerHTML = list.map(p => `<div class="card">

@@ -8,8 +8,9 @@ const { sendPasswordResetEmail }  = require('../services/email');
 
 const router = express.Router();
 
-function getAllowedAdminEmail() {
-  return (process.env.ADMIN_EMAIL || 'admin@internug.ug').trim().toLowerCase();
+function getAllowedAdminEmails() {
+  const envEmail = process.env.ADMIN_EMAIL || 'admin@internug.ug';
+  return envEmail.split(',').map(e => e.trim().toLowerCase());
 }
 
 // ── POST /api/auth/register ───────────────────────────
@@ -25,8 +26,8 @@ router.post('/register', async (req, res) => {
     if (password.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters.' });
     }
-    if (role === 'admin' && normalizedEmail !== getAllowedAdminEmail()) {
-      return res.status(403).json({ error: 'Admin registration is restricted to one authorized account.' });
+    if (role === 'admin' && !getAllowedAdminEmails().includes(normalizedEmail)) {
+      return res.status(403).json({ error: 'Admin registration is restricted to authorized accounts.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -90,8 +91,8 @@ router.post('/login', async (req, res) => {
     if (error || !user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
-    if (user.role === 'admin' && user.email.toLowerCase() !== getAllowedAdminEmail()) {
-      return res.status(403).json({ error: 'Admin access is restricted to the authorized account.' });
+    if (user.role === 'admin' && !getAllowedAdminEmails().includes(user.email.toLowerCase())) {
+      return res.status(403).json({ error: 'Admin access is restricted to authorized accounts.' });
     }
 
     const token = jwt.sign(

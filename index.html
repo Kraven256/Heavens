@@ -444,6 +444,7 @@ body.home-mode .content{padding:0;max-width:100%;}
 /* PANEL */
 .panel{background:var(--paper);border:1px solid var(--border);border-radius:var(--r-lg);padding:2.25rem 2.5rem;max-width:700px;}
 .panel-title{font-family:var(--display);font-size:1.35rem;color:var(--text);margin-bottom:1.5rem;font-style:italic;}
+.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
 
 /* EMPTY */
 .empty{text-align:center;padding:4rem 2rem;color:var(--text3);}
@@ -471,10 +472,20 @@ body.home-mode .content{padding:0;max-width:100%;}
   .auth-card{padding:2rem 1.5rem;}
   .panel{padding:1.5rem 1.25rem;}
   .auth-wrap{margin-left:0;padding-left:1rem;}
+  .card{padding:1.25rem;}
+  .stat-card{padding:1rem;}
+  .dashboard-grid{grid-template-columns:1fr;gap:1.25rem;}
+  .tab-bar{flex-wrap:wrap;overflow-x:visible;border-bottom:none;gap:.5rem;margin-bottom:1.5rem;}
+  .tab{border:1px solid var(--border);border-radius:20px;padding:.5rem 1rem;font-size:.82rem;white-space:nowrap;margin-bottom:0;background:var(--paper);color:var(--text3);transition:all .15s;}
+  .tab:hover{background:var(--sand);color:var(--text);}
+  .tab.active{background:var(--green);color:#fff;border-color:var(--green);font-weight:700;}
+  .records-bar{flex-direction:column;align-items:stretch;gap:.75rem;padding:1rem;}
+  .records-bar .field{width:100%;min-width:0;}
+  .records-bar .btn{width:100%;justify-content:center;}
 }
 @media(max-width:500px){
   .stats-row{grid-template-columns:repeat(2,1fr);gap:.75rem;}
-  .tab{padding:.65rem .9rem;font-size:.8rem;}
+  .tab{padding:.4rem .8rem;font-size:.78rem;}
   .content{padding:1.25rem 1rem;}
 }
 
@@ -1515,7 +1526,7 @@ img.ad-company-logo {
       
       <div id="ad-dashboard" class="tab-content active">
         <div class="stats-row" id="adminStats"></div>
-        <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+        <div class="dashboard-grid">
           <div class="dashboard-panel">
             <h3 style="margin-bottom: 1rem; color: var(--text);">Recent Users</h3>
             <div class="grid" id="adminRecentUsers"></div>

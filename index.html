@@ -20,6 +20,7 @@
   --display:var(--font);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html, body { overflow-x: hidden; max-width: 100vw; }
 html{font-size:15px;}
 body{font-family:var(--font);background:var(--cream);color:var(--text);display:flex;min-height:100vh;line-height:1.65;}
 
@@ -64,6 +65,7 @@ body.home-mode .content{padding:0;max-width:100%;}
   padding:9rem 2.5rem 5rem;
   background:url('bg.png') center center/cover no-repeat;
   text-align:center;
+  overflow:hidden;
 }
 .home-hero::before{
   content:'';position:absolute;inset:0;

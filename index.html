@@ -691,9 +691,16 @@ body.home-mode .content{padding:0;max-width:100%;}
   flex-shrink: 0;
   box-shadow: 0 4px 16px rgba(0,0,0,.4);
 }
-.s-card-logo.mtn   { background: linear-gradient(135deg, #ffcb00, #f59e0b); }
-.s-card-logo.ura   { background: linear-gradient(135deg, #1e3a8a, #2563eb); }
-.s-card-logo.stanbic { background: linear-gradient(135deg, #1a3450, #2563eb); }
+img.s-card-logo {
+  object-fit: contain;
+  background: #fff;
+  padding: 4px;
+}
+img.ad-company-logo {
+  object-fit: contain;
+  background: #fff;
+  padding: 2px;
+}
 .s-card-name {
   font-weight: 800;
   font-size: 1rem;
@@ -1249,7 +1256,7 @@ body.home-mode .content{padding:0;max-width:100%;}
                   <div class="s-card-badge">📡 Telecom</div>
                   <div class="s-card-body">
                     <div class="s-card-company">
-                      <div class="s-card-logo mtn">📶</div>
+                      <img class="s-card-logo" src="https://logo.clearbit.com/mtn.co.ug" alt="MTN" onerror="this.src='https://ui-avatars.com/api/?name=MTN&background=random&color=fff'">
                       <div>
                         <div class="s-card-name">MTN Uganda</div>
                         <div class="s-card-sector">Telecommunications</div>
@@ -1273,7 +1280,7 @@ body.home-mode .content{padding:0;max-width:100%;}
                   <div class="s-card-badge">🏛️ Government</div>
                   <div class="s-card-body">
                     <div class="s-card-company">
-                      <div class="s-card-logo ura">📊</div>
+                      <img class="s-card-logo" src="https://logo.clearbit.com/ura.go.ug" alt="URA" onerror="this.src='https://ui-avatars.com/api/?name=URA&background=random&color=fff'">
                       <div>
                         <div class="s-card-name">Uganda Revenue Authority</div>
                         <div class="s-card-sector">Public Finance & Tax</div>
@@ -1297,7 +1304,7 @@ body.home-mode .content{padding:0;max-width:100%;}
                   <div class="s-card-badge">🏦 Banking</div>
                   <div class="s-card-body">
                     <div class="s-card-company">
-                      <div class="s-card-logo stanbic">💰</div>
+                      <img class="s-card-logo" src="https://logo.clearbit.com/stanbicbank.co.ug" alt="Stanbic" onerror="this.src='https://ui-avatars.com/api/?name=Stanbic&background=random&color=fff'">
                       <div>
                         <div class="s-card-name">Stanbic Bank Uganda</div>
                         <div class="s-card-sector">Financial Services</div>
@@ -2583,6 +2590,23 @@ function adRoleColor(role) {
   return { student:'#3B82F6', company:'#34D399', admin:'#22D3EE' }[role] || '#94A3B8';
 }
 
+function getCompanyLogo(name) {
+  const map = {
+    'mtn uganda': 'mtn.co.ug', 'mtn': 'mtn.co.ug',
+    'uganda revenue authority': 'ura.go.ug', 'ura': 'ura.go.ug',
+    'stanbic bank': 'stanbicbank.co.ug', 'stanbic bank uganda': 'stanbicbank.co.ug',
+    'safeboda': 'safeboda.com',
+    'airtel': 'airtel.co.ug', 'airtel uganda': 'airtel.co.ug',
+    'nita-u': 'nita.go.ug',
+    'centenary bank': 'centenarybank.co.ug',
+    'makerere university': 'mak.ac.ug'
+  };
+  const key = (name || '').toLowerCase().trim();
+  if (map[key]) return `https://logo.clearbit.com/${map[key]}`;
+  // Fallback to UI avatars
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || '?')}&background=random&color=fff`;
+}
+
 let _adPlacementChart = null, _adDonutChart = null;
 
 async function adInitCharts() {
@@ -2662,11 +2686,9 @@ async function adRenderCompanies() {
     const map = {};
     ints.forEach(i => { if (!map[i.company_name]) map[i.company_name]={name:i.company_name,count:0}; map[i.company_name].count++; });
     const sorted = Object.values(map).sort((a,b)=>b.count-a.count).slice(0,6);
-    const icons  = ['📶','💰','📊','📡','🛵','💻'];
-    const clrs   = ['#ffcb00,#f59e0b','#1a3450,#2563eb','#1e3a8a,#3b82f6','#dc2626,#ef4444','#065f46,#059669','#7c3aed,#a855f7'];
     el.innerHTML = sorted.length ? sorted.map((c,i)=>`
       <div class="ad-company-row">
-        <div class="ad-company-logo" style="background:linear-gradient(135deg,${clrs[i%clrs.length]})">${icons[i%icons.length]}</div>
+        <img class="ad-company-logo" src="${getCompanyLogo(c.name)}" alt="${c.name}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(c.name)}&background=random&color=fff'">
         <div style="flex:1;min-width:0">
           <div class="ad-company-name">${c.name}</div>
           <div class="ad-company-sector">Partner Company</div>
